@@ -9,14 +9,11 @@ jobs:
 
     strategy:
       matrix:
-        # पुराने 16.x को बदलकर नया 24.x (Latest LTS) कर दिया है
-        node-version: [24.x] 
+        node-version: [22.x]
 
     steps:
-      # v2 से v3 पर अपडेट किया ताकि 400 एरर ठीक हो सके
       - uses: actions/checkout@v3
 
-      # v2 से v3 पर अपडेट किया ताकि कैशिंग सही से काम करे
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:

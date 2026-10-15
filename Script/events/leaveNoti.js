@@ -1,8 +1,8 @@
 module.exports.config = {
   name: "leavenoti",
   eventType: ["log:unsubscribe"],
-  version: "2.0.0",
-  credits: "SHAHADAT SAHU", //Credit change koro na
+  version: "2.0.1",
+  credits: "SHAHADAT SAHU",
   description: "Leave notification and antiout system",
   dependencies: {
     "fs-extra": "",
@@ -10,7 +10,7 @@ module.exports.config = {
   }
 };
 
-module.exports.run = async function({ api, event, Users, Threads }) {
+module.exports.run = async function ({ api, event, Users, Threads }) {
   if (
     event.logMessageData.leftParticipantFbId ==
     api.getCurrentUserID()
@@ -22,9 +22,6 @@ module.exports.run = async function({ api, event, Users, Threads }) {
     mkdirSync,
     readdirSync
   } = global.nodemodule["fs-extra"];
-//অসুবিধার জন্য দুঃখিত তবে এখানে আপনাদের ইডিট করতে হবে না😊
-  //নতুন আপডেট এর পর এমন সিস্টেম করা হয়েছে,
-  //বট না এটোমেটিক লোড হয়ে যায়✅
 
   const { join } = global.nodemodule["path"];
 
@@ -84,20 +81,22 @@ module.exports.run = async function({ api, event, Users, Threads }) {
     return join(folder, randomFile);
   };
 
+  // ---------- Antiout System ----------
   if (isSelfLeave && data.antiout !== false) {
     return api.addUserToGroup(
       leftID,
       threadID,
       async (error) => {
 
+        // अगर add नहीं हो पाया
         if (error) {
           const mediaPath = getRandomMedia("add");
 
           const message =
-            `সরি বস, ${name} কে আবার এড করতে পারলাম না। 😔
-সম্ভবত উনি বটকে ব্লক করেছে অথবা তার Privacy Settings-এর কারণে এড করা যাচ্ছে না।
-
-◈━━꯭${botName}꯭━━◈`;
+            `सॉरी बॉस, ${name} को दोबारा add नहीं कर पाया 😔\n` +
+            `शायद उसने bot को block कर दिया है,\n` +
+            `या उसकी Privacy Settings की वजह से add नहीं हो पा रहा।\n\n` +
+            `◈━━꯭${botName}꯭━━◈`;
 
           if (mediaPath) {
             return api.sendMessage(
@@ -109,23 +108,18 @@ module.exports.run = async function({ api, event, Users, Threads }) {
             );
           }
 
-          return api.sendMessage(
-            message,
-            threadID
-          );
+          return api.sendMessage(message, threadID);
         }
 
+        // अगर add हो गया
         const mediaPath = getRandomMedia("leave");
 
         const message =
-          `আরে ভাই! 😭
-
-এডমিনের অনুমতি ছাড়া লিভ?
-এত সাহস কই পেলি? 😂
-
-যা, তোরে আবার গ্রুপে ঢুকায় দিলাম! 🤣
-
-◈━━꯭${botName}꯭━━◈`;
+          `अरे भाई! 😭\n\n` +
+          `Admin की permission के बिना Leave?\n` +
+          `इतनी हिम्मत कहाँ से आई? 😂\n\n` +
+          `ले, तुझे दोबारा ग्रुप में डाल दिया! 🤣\n\n` +
+          `◈━━꯭${botName}꯭━━◈`;
 
         if (mediaPath) {
           return api.sendMessage(
@@ -137,25 +131,24 @@ module.exports.run = async function({ api, event, Users, Threads }) {
           );
         }
 
-        return api.sendMessage(
-          message,
-          threadID
-        );
+        return api.sendMessage(message, threadID);
       }
     );
   }
 
+  // ---------- Leave Message ----------
   const type = isSelfLeave
-    ? `আরে ভাই! 😭
-এডমিনের অনুমতি ছাড়া লিভ? এত সাহস কই পেলি? 😂
-যা যা, আবার আসলে খবর আছে কিন্তু! 😤
-◈━━꯭${botName}꯭━━◈`
+    ? `अरे भाई! 😭\n` +
+      `Admin की permission के बिना Leave?\n` +
+      `इतनी हिम्मत कहाँ से आई? 😂\n` +
+      `चल-चल, दोबारा आया तो खबर है! 😤\n` +
+      `◈━━꯭${botName}꯭━━◈`
 
-    : `ওহো! 😳
-এই গ্রুপের Admin-ও তোকে সয্য করতে পারলো না! 🤣
-তাই তোমাকে লাথি মেরে গ্রুপ থেকে বের করে দেওয়া হলো! 👋😂
-ভালো থাকিস, আর স্বপ্নে গ্রুপে আসিস! 🤧
-◈━━꯭${botName}꯭━━◈`;
+    : `ओहो! 😳\n` +
+      `इस ग्रुप के Admin भी तुझे बर्दाश्त नहीं कर पाए! 🤣\n` +
+      `इसलिए तुझे लात मारकर ग्रुप से निकाल दिया! 👋😂\n` +
+      `अच्छा रह, और सपने में ग्रुप में आना! 🤧\n` +
+      `◈━━꯭${botName}꯭━━◈`;
 
   const mediaPath = getRandomMedia(
     isSelfLeave ? "leave" : "remove"

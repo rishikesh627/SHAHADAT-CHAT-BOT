@@ -2,25 +2,26 @@ name: Node.js CI
 
 on:
   workflow_dispatch:
-  
 
 jobs:
   build:
-
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # पुराने 16.x को बदलकर नया 24.x (Latest LTS) कर दिया है
+        node-version: [24.x] 
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm start
+      # v2 से v3 पर अपडेट किया ताकि 400 एरर ठीक हो सके
+      - uses: actions/checkout@v3
+
+      # v2 से v3 पर अपडेट किया ताकि कैशिंग सही से काम करे
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm install
+      - run: npm start

@@ -6,9 +6,9 @@ module.exports.config = {
   name: "help",
   aliases: ["commands", "menu"],
   usePrefix: true,
-  version: "2.2.0",
+  version: "2.2.2",
   hasPermssion: 0,
-  credits: "SHAHADAT SAHU",
+  credits: "RISHIKESH",
   description: "Shows all commands with details",
   commandCategory: "system",
   usages: "[command name/page number]",
@@ -29,12 +29,12 @@ module.exports.languages = {
   }
 };
 
-const helpImages = [
-  "https://i.imgur.com/cwd64Av.jpeg",
-  "https://i.imgur.com/hPtliXo.jpeg",
-  "https://i.imgur.com/L7txp4M.jpeg",
-  "https://i.imgur.com/5dG8PS5.jpeg"
-];
+// ✅ Permanent single image (your profile)
+const HELP_IMAGE = "https://i.imgur.com/l5xNpRB.jpeg";
+
+// ─────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────
 
 function getPrefix(threadID) {
   const threadSetting =
@@ -55,10 +55,8 @@ function getBotName() {
   );
 }
 
+// ✅ Unique temp file per call (no race condition)
 function downloadImage(callback) {
-  const randomUrl =
-    helpImages[Math.floor(Math.random() * helpImages.length)];
-
   const cacheDir = path.join(__dirname, "cache");
 
   if (!fs.existsSync(cacheDir)) {
@@ -67,22 +65,22 @@ function downloadImage(callback) {
 
   const filePath = path.join(
     cacheDir,
-    "help_random.jpg"
+    `help_${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`
   );
 
-  request(randomUrl)
-    .pipe(fs.createWriteStream(filePath))
-    .on("close", () => callback(filePath));
+  const stream = request(HELP_IMAGE).pipe(fs.createWriteStream(filePath));
+
+  stream.on("close", () => callback(filePath));
+  stream.on("error", () => callback(null));
 }
 
 function sendMessage(api, event, text) {
-  const filePath = path.join(
-    __dirname,
-    "cache",
-    "help_random.jpg"
-  );
-
   downloadImage(file => {
+    // Fallback: text only if image download failed
+    if (!file || !fs.existsSync(file)) {
+      return api.sendMessage(text, event.threadID, event.messageID);
+    }
+
     api.sendMessage(
       {
         body: text,
@@ -90,9 +88,9 @@ function sendMessage(api, event, text) {
       },
       event.threadID,
       () => {
-        if (fs.existsSync(file)) {
-          fs.unlinkSync(file);
-        }
+        try {
+          if (fs.existsSync(file)) fs.unlinkSync(file);
+        } catch (e) {}
       },
       event.messageID
     );
@@ -126,8 +124,12 @@ function getCommandInfo(command, prefix, botName) {
 
 ⚙️ 𝗣𝗿𝗲𝗳𝗶𝘅: ${prefix}
 🤖 𝗕𝗼𝘁 𝗡𝗮𝗺𝗲: ${botName}
-🌸 𝗢𝘄𝗻𝗲𝗿: SHAHADAT SAHU`;
+🌸 𝗢𝘄𝗻𝗲𝗿: RISHIKESH`;
 }
+
+// ─────────────────────────────────────────────
+// Main
+// ─────────────────────────────────────────────
 
 module.exports.run = function ({
   api,
@@ -153,6 +155,7 @@ module.exports.run = function ({
         : null
     : null;
 
+  // ── Single command detail ──
   if (queryName && commands.has(queryName)) {
     const command = commands.get(queryName);
 
@@ -174,6 +177,7 @@ module.exports.run = function ({
     return;
   }
 
+  // ── Full command list / pagination ──
   const arrayInfo = Array.from(commands.keys())
     .filter(
       cmdName =>
@@ -232,7 +236,7 @@ ${msg}
 ┃ 🤖 Bot Name:
 ┃ ${botName}
 ┃ 🔰 Owner:
-┃ 𝐒𝐇𝐀𝐇𝐀𝐃𝐀𝐓 𝐒𝐀𝐇𝐔
+┃ 𝐑𝐈𝐒𝐇𝐈𝐊𝐄𝐒𝐇
 ╰━━━━━━━━━━━━━━━━╯`;
 
   sendMessage(

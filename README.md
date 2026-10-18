@@ -1,59 +1,19 @@
-<div align="center">
+✦ MESSENGER MIRAI CHATBOT FOEK ✦
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:001B44,50:0066CC,100:00D9FF&height=200&section=header&text=✦%20MESSENGER%20MIRAI%20CHATBOT%20FOEK%20✦&fontSize=42&fontColor=FFFFFF&fontAlignY=42&animation=fadeIn" width="100%" alt="MESSENGER MIRAI CHATBOT FOEK">
+❖ अपने मैसेंजर को एक कदम आगे ले जाएं! अधिक स्मार्ट, आसान और आधुनिक Messenger Experience के लिए उपयोग करें SHAHADAT CHAT BOT — आपके मैसेंजर के लिए एक Powerful Multi-Device Bot!
 
-</div>
+अस्सलामु अलैकुम सभी को! — SHAHADAT CHAT BOT Fork में आपका स्वागत है!
 
+SHAHADAT CHAT BOT — Developed By SHAHADAT SAHU
 
-> ❖ **`আপনার মেসেঞ্জারকে নিয়ে যান আরও এক ধাপ উপরে!
-আরও স্মার্ট, সহজ ও আধুনিক Messenger Experience-এর জন্য ব্যবহার করুন SHAHADAT CHAT BOT — আপনার মেসেঞ্জারের জন্য একটি Powerful Multi-Device Bot!`**
-
-</div>
-
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&duration=3000&pause=1000&color=00A8FF&center=true&vCenter=true&width=500&lines=Assalamualaikum+Everyone!;Welcome+To+SHAHADAT+CHAT+BOT+Fork!" />
-</p>
-
-<p align="center">
-  <img src="./assets/logo.svg" width="100%" alt="SHAHADAT SAHU">
-</p>
-
-<p align="center" style="font-family: 'Segoe UI', sans-serif; font-weight: bold;">
-  <span style="font-size: 32px; font-weight: 700; color:#00A8FF;">
-    SHAHADAT CHAT BOT
-  </span>
-  
-
-  <span style="font-size: 22px; font-weight: 700; color:#FF8A00;">
-    Developed By SHAHADAT SAHU
-  </span>
-</p>
-
-<div align="center">
-
-  <img src="https://komarev.com/ghpvc/?username=shahadat-sahu&label=Fork%20Views&color=blueviolet&style=for-the-badge" alt="Fork Views">
-  <a href="https://gitlab.com/shahadat-sahu/SHAHADAT-CHAT-BOT">
-    <img src="https://img.shields.io/badge/ORIGINAL%20REPOSITORY-black?style=for-the-badge&logo=github&logoColor=white" alt="Original Repo">
-  </a>
-
-</div>
-
-
-
-
-<div align="center">
-
-  <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js">
-  <img src="https://img.shields.io/badge/Messenger-Bot-0084FF?style=flat-square&logo=messenger&logoColor=white" alt="Messenger">
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
-
-</div>
+Node.js 20.x • Messenger Bot • License: MIT
 
 ---
 
-## ❖ DEPLOY WORKFLOWS ❖
+❖ DEPLOY WORKFLOWS ❖
 
-> 🚀 **GitHub Actions দিয়ে অটো ডিপ্লয় করার জন্য `.github/workflows/main.yml` ফাইলটি এই YML কোড দিয়ে পরিবর্তন করে নিন।**
+🚀 GitHub Actions से ऑटो डिप्लॉय करने के लिए .github/workflows/main.yml फाइल को इस YML कोड से बदल दें।
+
 ```yaml
 name: Node.js CI
 
@@ -95,26 +55,13 @@ jobs:
 
 ---
 
-## 🚀 এই প্রজেক্টটি কীভাবে ব্যবহার করবেন
+🚀 इस प्रोजेक्ट को कैसे उपयोग करें
 
-<p align="center">
-  <a href="https://youtu.be/blg0O7IgcrA?si=vpz42AK06uIblLN9">
-    <img
-      src="./assets/thumbnail.svg"
-      width="100%"
-      alt="SHAHADAT CHAT BOT Full Tutorial"
-    />
-  </a>
-</p>
+🎬 Thumbnail पर क्लिक करके पूरा वीडियो ट्यूटोरियल देखें → YouTube Tutorial
 
-<p align="center">
-  🎬 <b>Thumbnail-এ ক্লিক করে সম্পূর্ণ ভিডিও টিউটোরিয়াল দেখুন</b>
-</p>
+🤖 बॉट चलाने के चरण
 
-### 🤖 বট চালানোর ধাপ
-
-**Start Command**  
-আপনার বট ফাইলগুলো যেখানে আছে সেই ফোল্ডারে যান:
+Start Command — जिस फोल्डर में आपके बॉट फाइल्स हैं वहां जाएं:
 
 ```bash
 node Sahu.js
@@ -122,32 +69,29 @@ node Sahu.js
 
 ---
 
-## ⚙️ Command System
+⚙️ Command System
 
-> 💡 **Prefix ও Aliases দিয়ে আপনার Command System আরও Flexible করুন।**
->
-> দুটি ফিচার — **`usePrefix`** (prefix নিয়ম) ও **`aliases`** (একাধিক নাম)।
+💡 Prefix और Aliases से अपने Command System को और Flexible बनाएं। दो फीचर — usePrefix (prefix नियम) और aliases (कई नाम)।
 
-### 1️⃣ usePrefix
+1️⃣ usePrefix
 
-#### 🤔 এটা আসলে কী করে?
+🤔 यह असल में क्या करता है?
 
-বটকে কমান্ড পাঠানোর সময় prefix লাগবে কি না — সেটাই ঠিক করে `usePrefix`।
+बॉट को कमांड भेजते समय prefix लगेगा या नहीं — यही तय करता है usePrefix।
 
-- **Prefix** = কমান্ডের আগে বসানো চিহ্ন, যেমন `/`। তাই `/help` = prefix সহ, আর `help` = prefix ছাড়া।
-- `usePrefix: true` → prefix দিয়েও চলবে, না দিয়েও চলবে।
-- `usePrefix: false` → শুধু prefix দিয়েই চলবে।
+· Prefix = कमांड से पहले लगाया जाने वाला चिह्न, जैसे /। इसलिए /help = prefix के साथ, और help = prefix के बिना।
+· usePrefix: true → prefix के साथ भी चलेगा, बिना भी चलेगा।
+· usePrefix: false → सिर्फ prefix के साथ ही चलेगा।
 
-| সেটিং | `/help` | `help` |
-| :--- | :---: | :---: |
-| `true` | ✅ | ✅ |
-| `false` | ✅ | ❌ |
+सेटिंग /help help
+true ✅ ✅
+false ✅ ❌
 
-> 📌 লক্ষ্য করুন: `false` মানে "prefix একদম বন্ধ" নয় — বরং "prefix বাধ্যতামূলক"। দুই ক্ষেত্রেই prefix দিয়ে কাজ করে, পার্থক্য শুধু prefix ছাড়া চলবে কি না।
+📌 ध्यान दें: false का मतलब "prefix बिल्कुल बंद" नहीं है — बल्कि "prefix अनिवार्य"। दोनों स्थितियों में prefix से काम करता है, फर्क सिर्फ यह है कि prefix के बिना चलेगा या नहीं।
 
-#### 🌐 Global — config.json এ সেট করলে সব কমান্ডে
+🌐 Global — config.json में सेट करने पर सभी कमांड पर
 
-`config.json`-এ একবার সেট করলে **পুরো বটের সব কমান্ডে** একই নিয়ম কাজ করবে। প্রতিটি কমান্ড ফাইল আলাদা করে এডিট করতে হবে না।
+config.json में एक बार सेट करने पर पूरे बॉट के सभी कमांड में एक ही नियम लागू होगा। हर कमांड फाइल को अलग से एडिट नहीं करना पड़ेगा।
 
 ```json
 {
@@ -155,7 +99,7 @@ node Sahu.js
 }
 ```
 
-👉 এখন যা-ই পাঠান, দুইভাবেই কাজ করবে:
+👉 अब जो भी भेजें, दोनों तरह से काम करेगा:
 
 ```
 /help    ➜  help
@@ -163,45 +107,44 @@ node Sahu.js
 /song    ➜  song
 ```
 
-#### 🧩 Per-command — শুধু একটা কমান্ডের জন্য
+🧩 Per-command — सिर्फ एक कमांड के लिए
 
-সব কমান্ডে একই নিয়ম না চাইলে, যে কমান্ডটার জন্য বদলাতে চান শুধু তার ফাইলে `usePrefix` লিখুন।
+सभी कमांड में एक ही नियम नहीं चाहिए तो जिस कमांड के लिए बदलना चाहते हैं सिर्फ उसकी फाइल में usePrefix लिखें।
 
 ```js
-// prefix + no prefix — দুভাবেই চলবে
+// prefix + no prefix — दोनों तरह से चलेगा
 module.exports.config = {
   name: "help",
   usePrefix: true
 };
 
-// শুধু prefix — prefix ছাড়া লিখলে কিছু হবে না
+// सिर्फ prefix — prefix के बिना लिखने पर कुछ नहीं होगा
 module.exports.config = {
   name: "restart",
   usePrefix: false
 };
 ```
 
-#### ⚖️ দুইটাই সেট করলে কোনটা মানবে? (Priority)
+⚖️ दोनों सेट करने पर कौन मानेगा? (Priority)
 
-**কমান্ড ফাইলের সেটিং সবসময় জিতে যাবে।** গ্লোবাল শুধু তখনই কাজ করে, যখন কমান্ড ফাইলে `usePrefix` লেখা নেই।
+कमांड फाइल की सेटिंग हमेशा जीत जाएगी। Global सिर्फ तभी काम करता है जब कमांड फाइल में usePrefix नहीं लिखा हो।
 
 ```
-কমান্ড ফাইলে usePrefix আছে?  →  হ্যাঁ ➜ ওটাই মানবে
-                              →  না  ➜ config.json এর মান মানবে
+कमांड फाइल में usePrefix है?  →  हाँ ➜ वही मानेगा
+                              →  नहीं ➜ config.json का मान मानेगा
 ```
 
-| `config.json` | কমান্ড ফাইল | ফলাফল |
-| :---: | :---: | :--- |
-| `true` | লেখা নেই | prefix + no prefix |
-| `true` | `false` | শুধু prefix |
-| `false` | `true` | prefix + no prefix |
-| `false` | লেখা নেই | শুধু prefix |
+config.json कमांड फाइल परिणाम
+true नहीं लिखा prefix + no prefix
+true false सिर्फ prefix
+false true prefix + no prefix
+false नहीं लिखा सिर्फ prefix
 
 ---
 
-### 2️⃣ Aliases
+2️⃣ Aliases
 
-একটা কমান্ডের অনেকগুলো নাম দিতে `aliases` ব্যবহার করুন:
+एक कमांड के कई नाम देने के लिए aliases उपयोग करें:
 
 ```js
 module.exports.config = {
@@ -210,161 +153,80 @@ module.exports.config = {
 };
 ```
 
-👉 এখন একই কমান্ড চালাবে:
+👉 अब एक ही कमांड चलेगा: /help /h /menu /commands /cmd
 
-```
-/help   /h   /menu   /commands   /cmd
-```
-
-- যত খুশি নাম যোগ করা যাবে।
-- ছোট alias রাখুন — `h`, `menu`, `cmd`।
-- একই alias দুই কমান্ডে দিলে কনফ্লিক্ট হবে।
-- `aliases` শুধু নাম বাড়ায় — prefix নিয়ম ঠিক করে `usePrefix`।
+· जितने चाहें नाम जोड़ सकते हैं।
+· छोटे alias रखें — h, menu, cmd।
+· एक ही alias दो कमांड में देने पर कॉन्फ्लिक्ट होगा।
+· aliases सिर्फ नाम बढ़ाता है — prefix नियम तय करता है usePrefix।
 
 ---
 
-## 🔥 Features
+🔥 Features
 
-| ✨ ফিচার | 📝 বিবরণ |
-| :--- | :--- |
-| 💬 **Auto Chat** | প্রাকৃতিক ভাষা প্রসেসিংয়ের মাধ্যমে স্বয়ংক্রিয় এবং নিরবচ্ছিন্ন কথোপকথন উপভোগ করুন। |
-| 🖼️ **Photo Editing** | আমাদের অ্যাডভান্সড কমান্ড ব্যবহার করে পেশাদার মানের ছবি এডিট করুন, অতিরিক্ত অ্যাপের প্রয়োজন নেই। |
-| 🎨 **Image Generation** | আমাদের অত্যাধুনিক টেক্সট-টু-ইমেজ প্রযুক্তি ব্যবহার করে অনন্য ছবি তৈরি করুন। |
-| 📥 **Video Downloader** | YouTube, Facebook, TikTok এবং অন্যান্য প্ল্যাটফর্ম থেকে HD ভিডিও ডাউনলোড করুন। |
-| 🎮 **Interactive Games** | মেসেঞ্জারে সরাসরি গেম এড করে মজার গেম খেলুন, ইনস্টলেশনের ঝামেলা ছাড়াই! |
-| 🎉 **Fun Commands** | শত শত মজার কমান্ড দিয়ে আপনার বন্ধুদের চমকে দিন! |
-
----
-
-## 👨‍💻 Developer
-
-<div align="center">
-
-| তথ্য | বিবরণ |
-| :--- | :--- |
-| **Name** | **SHAHADAT SAHU** |
-| **Age** | 18+ |
-| **Location** | KHAGRACHARI, BANGLADESH |
-| **Role** | STUDENT • DEVELOPER |
-
-</div>
-
-**About:**
-
-> 💻 আমি কোনো প্রফেশনাল প্রোগ্রামার নই।  
-> আমি প্রোগ্রামিং করতে ভালো লাগে, তাই বন্ধুদের কাছ থেকে হেল্প নিয়ে এবং AI Tools-এর সহায়তায়  
-> বিভিন্ন রকমের Project, Chatbot ও নতুন নতুন Technology Develop করতে পছন্দ করি।
-
-**Interests:**
-
-- 🤖 Chatbot Development
-- 💻 Programming
-- 🌐 Web Development
-- 🧠 AI & Technology
-- 🛠️ Open Source Projects
-
-**📞 Contact**
-
-<p>
-  <b>Facebook</b>    
-  <a href="https://facebook.com/100044713412032">
-    <img src="https://img.shields.io/badge/CLICK%20NOW-1877F2?style=for-the-badge&logo=facebook&logoColor=white" width="150" alt="Facebook">
-  </a>
-</p>
-
-<p>
-  <b>Messenger</b>  
-  <a href="https://m.me/100044713412032">
-    <img src="https://img.shields.io/badge/MESSAGE%20ME-0084FF?style=for-the-badge&logo=messenger&logoColor=white" width="150" alt="Messenger">
-  </a>
-</p>
-
-<p>
-  <b>WhatsApp</b>    
-  <a href="https://wa.me/01882333052">
-    <img src="https://img.shields.io/badge/CHAT%20NOW-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" width="150" alt="WhatsApp">
-  </a>
-</p>
+✨ फीचर 📝 विवरण
+💬 Auto Chat प्राकृतिक भाषा प्रोसेसिंग के माध्यम से स्वचालित और निर्बाध बातचीत का आनंद लें।
+🖼️ Photo Editing हमारे एडवांस्ड कमांड से प्रोफेशनल स्तर की फोटो एडिट करें, अतिरिक्त ऐप की जरूरत नहीं।
+🎨 Image Generation हमारी आधुनिक टेक्स्ट-टू-इमेज तकनीक से अनोखी तस्वीरें बनाएं।
+📥 Video Downloader YouTube, Facebook, TikTok और अन्य प्लेटफॉर्म से HD वीडियो डाउनलोड करें।
+🎮 Interactive Games मैसेंजर में सीधे गेम जोड़कर मजेदार गेम खेलें, इंस्टॉलेशन की झंझट के बिना!
+🎉 Fun Commands सैकड़ों मजेदार कमांड से अपने दोस्तों को चौंका दें!
 
 ---
 
-## ❖ সাপোর্ট
+👨‍💻 Developer
 
-আপনার কোনো সাহায্যের প্রয়োজন হলে, আপনি অ্যাডমিনের সাথে যোগাযোগ করতে পারেন।  
-বিশেষ প্রয়োজন ছাড়া অনুগ্রহ করে অ্যাডমিনকে ডিস্টার্ব করবেন না। ধন্যবাদ!
+जानकारी विवरण
+Name SHAHADAT SAHU
+Age 18+
+Location KHAGRACHARI, BANGLADESH
+Role STUDENT • DEVELOPER
 
-<p align="center">
-  <a href="https://wa.me/+8801882333052?text=Assalamualaikum%20Admin%20SHAHADAT%20SAHU%20Need%20Help%20Please%20Brother%20🫶">
-    <img alt="WhatsApp" src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white">
-  </a>
-  <a href="https://m.me/100044713412032">
-    <img alt="Messenger" src="https://img.shields.io/badge/Messenger-00B2FF?style=for-the-badge&logo=messenger&logoColor=white">
-  </a>
-</p>
+About: 💻 मैं कोई प्रोफेशनल प्रोग्रामर नहीं हूं। मुझे प्रोग्रामिंग करना अच्छा लगता है, इसलिए दोस्तों की मदद से और AI Tools की सहायता से अलग-अलग Project, Chatbot और नई-नई Technology Develop करना पसंद करता हूं।
 
-### 🤝 Support Community
+Interests: 🤖 Chatbot Development • 💻 Programming • 🌐 Web Development • 🧠 AI & Technology • 🛠️ Open Source Projects
 
-আপনার সাধারণ সাহায্য, আলোচনা ও আপডেটের জন্য আমাদের Support Box-গুলোতে Join করুন।
+📞 Contact:
 
-<p align="center">
-  <a href="https://t.me/+SsytNIVVIHZiODhl">
-    <img alt="Telegram Support" src="https://img.shields.io/badge/Telegram%20Support-Join%20Now-26A5E4?style=for-the-badge&logo=telegram&logoColor=white">
-  </a>
-  
-
-
-  <a href="https://m.me/j/AbZDGjBnHV0-K5sD/?send_source=gc%3Acopy_invite_link_t">
-    <img alt="Messenger Support" src="https://img.shields.io/badge/Messenger%20Support-Join%20Now-0084FF?style=for-the-badge&logo=messenger&logoColor=white">
-  </a>
-</p>
-
-> 💡 যেকোনো সাধারণ সমস্যা বা সাহায্যের জন্য আগে Support Box-গুলোতে Join করে প্রশ্ন করতে পারেন।
+· Facebook → CLICK NOW
+· Messenger → MESSAGE ME
+· WhatsApp → CHAT NOW
 
 ---
 
-### ✨🌟 Special Thanks 🌟✨
+❖ सपोर्ट
 
-- 🚀 **Cyber Bot Team**
-- 🧙‍♂️ **Ullash** — Owner, Cyber Bot Team
-- 🛡️ **Sujon** — Admin, Cyber Bot Team
-- 🎓 **Grandpa EJ** — Owner, Grandpa Academy
+अगर आपको किसी मदद की जरूरत हो, तो आप एडमिन से संपर्क कर सकते हैं। खास जरूरत के बिना कृपया एडमिन को डिस्टर्ब न करें। धन्यवाद!
+
+· WhatsApp पर संपर्क करें
+· Messenger पर संपर्क करें
+
+🤝 Support Community
+
+अपनी सामान्य मदद, चर्चा और अपडेट के लिए हमारे Support Box में Join करें।
+
+· Telegram Support
+· Messenger Support
+
+💡 किसी भी सामान्य समस्या या मदद के लिए पहले Support Box में Join करके सवाल पूछ सकते हैं।
 
 ---
 
-<div align="center">
+✨🌟 Special Thanks 🌟✨
 
-💖 **𝗦𝗵𝗮𝗵𝗮𝗱𝗮𝘁 𝗖𝗵𝗮𝘁 𝗕𝗼𝘁** বেছে নেওয়ার জন্য ধন্যবাদ!
+· 🚀 Cyber Bot Team
+· 🧙‍♂️ Ullash — Owner, Cyber Bot Team
+· 🛡️ Sujon — Admin, Cyber Bot Team
+· 🎓 Grandpa EJ — Owner, Grandpa Academy
 
-🗓️ **Release Date: 11/08/2025 at 02:00**
+---
 
-⭐ ফর্ক করার পর একটি স্টার দিতে ভুলবেন না! এটি সত্যিই সাহায্য করে!
+💖 𝗦𝗵𝗮𝗵𝗮𝗱𝗮𝘁 𝗖𝗵𝗮𝘁 𝗕𝗼𝘁 चुनने के लिए धन्यवाद!
 
+🗓️ Release Date: 11/08/2025 at 02:00
 
+⭐ Fork करने के बाद एक Star देना न भूलें! यह सच में मदद करता है!
 
+Connect: GitLab • Telegram • Messenger Group • YouTube
 
-<p align="center">
-  <a href="https://gitlab.com/shahadat-sahu">
-    <img src="https://cdn.simpleicons.org/gitlab/FC6D26" width="48" alt="GitLab">
-  </a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-
-  <a href="https://t.me/SAHUDEVX">
-    <img src="https://cdn.simpleicons.org/telegram/26A5E4" width="48" alt="Telegram">
-  </a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-
-  <a href="https://m.me/j/AbZDGjBnHV0-K5sD/?send_source=gc%3Acopy_invite_link_t">
-    <img src="https://cdn.simpleicons.org/messenger/0084FF" width="48" alt="Messenger Group">
-  </a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-
-  <a href="https://youtube.com/@SAHUDEVX">
-    <img src="https://cdn.simpleicons.org/youtube/FF0000" width="48" alt="YouTube">
-  </a>
-</p>
-
-
-
-*আমি আশা করি আপনি আমার ফর্কটি উপভোগ করবেন! CHAT BOT কমিউনিটি সমর্থন করার জন্য আপনাকে অসংখ্য ধন্যবাদ!*
-
-</div>
+मुझे उम्मीद है कि आपको मेरा Fork पसंद आएगा! CHAT BOT कम्युनिटी को सपोर्ट करने के लिए आपका बहुत-बहुत धन्यवाद!

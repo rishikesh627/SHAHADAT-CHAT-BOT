@@ -1,0 +1,217 @@
+const fs = require("fs-extra");
+const request = require("request");
+
+module.exports.config = {
+  name: "joke",
+  aliases: ["jokes", "hasimazak", "funny"],
+  version: "3.0.0",
+  hasPermssion: 0,
+  credits: "SHAHADAT SAHU",
+  description: "200+ Hindi jokes (single file, no API)",
+  commandCategory: "Fun",
+  usages: "joke",
+  cooldowns: 3
+};
+
+// ============================================================
+// JOKE DATABASE (200+ jokes) - ek hi file mein
+// ============================================================
+const JOKES = [
+  "😂 Teacher: Tum school late kyun aaye?\nStudent: Sir, neend aa rahi thi.\nTeacher: Toh ghar pe so jate!\nStudent: Sir, ghar pe mummy ne soya hua dekh liya toh daant deti! 😅",
+  "🤣 Wife: Tum mujhe kitna pyaar karte ho?\nHusband: Jitna WiFi ka signal bina password ke! 😂",
+  "😆 Doctor: Tum roz subah uthke kya karte ho?\nPatient: Doctor, main uthke dekhta hoon ki aur kitni der sona hai! 😴",
+  "😂 Ek aadmi ne apni biwi se kaha: Main tumhe apni jaan se bhi zyada pyaar karta hoon.\nBiwi: Toh phir jaan kahan hai?\nAadmi: Tumhare haath mein... jab tum mujhe daant rahi hoti ho! 😅",
+  "🤣 Interviewer: Aapki biggest weakness kya hai?\nCandidate: Main jhooth nahi bolta.\nInterviewer: Achha? Toh aapne 5 saal ka experience kaha se laaya?\nCandidate: ...jhooth bol ke! 😂",
+  "😆 Mummy: Beta, padhai kar lo nahi toh doctor banoge toh kaise?\nBeta: Mummy, main toh WhatsApp doctor banunga — sabko forward karunga! 🤣",
+  "😂 Boss: Tum aaj phir late ho!\nEmployee: Sir, traffic tha.\nBoss: Kal bhi yehi bahana tha!\nEmployee: Sir, traffic toh roz hi hota hai! 😅",
+  "🤣 Teacher: 2 + 2 kitna hota hai?\nStudent: Sir, 4.\nTeacher: Shabash! Ab 4 + 4 batao.\nStudent: Sir, aap hi bata do, main thak gaya hoon! 😴",
+  "😆 Teacher: Tumne homework kyun nahi kiya?\nStudent: Sir, kal raat bijli chali gayi thi.\nTeacher: Toh candle ki roshni mein kar lete!\nStudent: Sir, candle bhi nahi thi — torch se dekha toh homework dikha hi nahi! 😂",
+  "😂 Teacher: Tum bade hoke kya banoge?\nStudent: Sir, main aapke jaisa teacher banunga.\nTeacher: Wah! Kyun?\nStudent: Kyunki aap bhi din bhar sirf padhate ho, kuch karte nahi! 🤣",
+  "🤣 Teacher: Exam mein cheating kyun ki?\nStudent: Sir, maine nahi ki — dost ne meri copy se copy kiya!\nTeacher: Toh tumhari copy mein galat answers kaise aaye?\nStudent: Sir, dost ne bhi galat copy kiya! 😅",
+  "😆 Teacher: Pani ka formula batao?\nStudent: Sir, H2O.\nTeacher: Achha, toh H2O ka matlab?\nStudent: Sir, 2 ladkiyan aur 1 ladka! 😂😂",
+  "😂 Teacher: Tumhari favourite subject kaunsi hai?\nStudent: Sir, lunch break! 🍱",
+  "🤣 Teacher: Tum itne intelligent kaise ho?\nStudent: Sir, main intelligent nahi hoon — main sirf aapke questions avoid karta hoon! 😎",
+  "😆 Teacher: Tumne kal ki class miss kyun ki?\nStudent: Sir, main aapko miss kar raha tha, isliye ghar pe ruk gaya! ❤️",
+  "😂 Teacher: Tumhara roll number kya hai?\nStudent: Sir, jo aapki list mein sabse last hai — wahi main hoon! 😅",
+  "🤣 Wife: Suno ji, main kitni sundar lag rahi hoon?\nHusband: Bilkul chand jaisi!\nWife: Sach mein?\nHusband: Haan, chand pe bhi daag hote hain! 🌙😂",
+  "😂 Wife: Aaj dinner mein kya banau?\nHusband: Jo tumhare haath ka bana ho!\nWife: Theek hai, maggi bana deti hoon! 🍜😂",
+  "😆 Husband: Biwi, meri chappal kahan hai?\nWife: Wahin jahan tumne rakhi thi.\nHusband: Wahan toh nahi hai!\nWife: Toh phir jahan maine rakhi thi! 😅",
+  "🤣 Wife: Tum mujhe surprise kyun nahi dete?\nHusband: Main toh roz surprise deta hoon — kab ghar aaunga, kab nahi! 🤣",
+  "😂 Wife: Meri nayi dress kaisi lagi?\nHusband: Bahut pyari!\nWife: Aur purani?\nHusband: Woh toh purani hai na, isliye purani lag rahi hai! 😂",
+  "😆 Husband: Biwi, aaj main jaldi ghar aaunga.\nWife: Achha? Toh kya khana banau?\nHusband: Kuch nahi — main bahar se khaake aunga! 😅",
+  "🤣 Wife: Tumne mujhe apni maa se compare kiya?\nHusband: Nahi, main toh tum dono ko equal samajhta hoon — dono hi mujhe daantti ho! 🤣",
+  "😂 Wife: Hum Shaadi anniversary pe kahan jayenge?\nHusband: Wahan jahan sabse sasta khana mile! 🍔😂",
+  "😆 Doctor: Tumhe kya takleef hai?\nPatient: Doctor, jab main chalta hoon toh dard hota hai.\nDoctor: Toh mat chalo!\nPatient: Doctor, main toh aapke paas chal ke aaya! 😅",
+  "🤣 Doctor: Tumhari tabiyat kaisi hai?\nPatient: Doctor, jab aap aa rahe the toh theek thi — ab aapki shakal dekh ke dard ho gaya! 😂",
+  "😂 Doctor: Tumne dawai li?\nPatient: Doctor, maine dawai ki photo li thi! 📸😂",
+  "😆 Doctor: Tumhe aaram chahiye.\nPatient: Doctor, main toh 24 ghante aaram karta hoon! 😴",
+  "🤣 Doctor: Tumhara wazan kitna hai?\nPatient: Doctor, main wazan nahi, tension seh raha hoon! 😅",
+  "😂 Patient: Doctor, mujhe bhoolne ki bimari hai.\nDoctor: Kab se hai?\nPatient: Kya kab se hai? 🤔😂",
+  "😆 Doctor: Tum roz kitna pani peete ho?\nPatient: Doctor, main beer peeta hoon — pani nahi! 🍺😂",
+  "🤣 Doctor: Tumhe exercise karni chahiye.\nPatient: Doctor, main roz TV ka remote uthata hoon — wahi exercise hai! 📺😅",
+  "😂 Doctor: Report achhi hai.\nPatient: Doctor, main theek hoon?\nDoctor: Haan, bas tumhara dimaag thoda kam hai! 😂",
+  "😆 Boss: Tum kaam kyun nahi kar rahe?\nEmployee: Sir, main kaam kar raha hoon — bas dikh nahi raha! 😎",
+  "🤣 Boss: Tumhe promotion chahiye?\nEmployee: Sir, main toh chahta hoon aapki kursi! 🪑😂",
+  "😂 Boss: Tumne report submit ki?\nEmployee: Sir, maine email kar di.\nBoss: Email mein attachment nahi tha!\nEmployee: Sir, attachment bhejna bhool gaya! 😅",
+  "😆 Boss: Tumhari salary badha di hai.\nEmployee: Sir, sach mein?\nBoss: Nahi, mazak kiya — bas thoda khush hone do! 😂",
+  "🤣 Boss: Tumne lunch break 2 ghante kiya?\nEmployee: Sir, maine 1 ghanta khaane mein aur 1 ghanta sochne mein lagaya — ki kaam kaise karun! 🤔😂",
+  "😂 Boss: Tumhari performance kharab hai.\nEmployee: Sir, main toh improve kar raha hoon — pehle isse bhi kharab thi! 😅",
+  "😆 Boss: Aaj overtime karo.\nEmployee: Sir, main toh overtime ke paise leke ghar jata hoon! 💰😂",
+  "🤣 Employee: Sir, mujhe chhutti chahiye.\nBoss: Kyun?\nEmployee: Sir, main thak gaya hoon kaam karke.\nBoss: Main bhi thak gaya hoon tumhari excuses sunke! 🤣",
+  "😂 Mummy: Beta, tumne apna kamra saaf kiya?\nBeta: Mummy, maine toh ise museum bana diya hai! 🏛️😂",
+  "🤣 Mummy: Beta, tum roz bahar kyun jaate ho?\nBeta: Mummy, main dhoop mein vitamin D le raha hoon! ☀️😎",
+  "😆 Papa: Beta, tumne kitab padhi?\nBeta: Papa, maine WhatsApp status padha — bahut knowledge mili! 📱😂",
+  "😂 Mummy: Beta, shaadi kab karoge?\nBeta: Mummy, pehle main apni life set karunga — matlab Netflix subscription! 📺😂",
+  "🤣 Papa: Beta, tumhe kya banna hai?\nBeta: Papa, main cricketer banunga!\nPapa: Toh practice kyun nahi karte?\nBeta: Papa, main TV pe dekh ke seekh raha hoon! 🏏😅",
+  "😆 Mummy: Beta, tumhara result kaisa aaya?\nBeta: Mummy, main fail nahi hua — maine sirf pass hone ka mauka chhod diya! 😂",
+  "😂 Papa: Beta, tumhare jeb se paise kahan gaye?\nBeta: Papa, maine invest kar diye — chocolate mein! 🍫😂",
+  "🤣 Mummy: Beta, tumne doodh piya?\nBeta: Mummy, maine chai pi — usme bhi doodh tha! ☕😅",
+  "😆 Papa: Beta, tum bade hoke kya karoge?\nBeta: Papa, main aapki tarah banunga — bas thoda better! 😎😂",
+  "😂 Dost: Yaar, mujhe paise udhaar de de.\nMain: Kitne chahiye?\nDost: 500.\nMain: Le 50, baaki khud dekh le! 😅",
+  "🤣 Dost: Yaar, meri gf ban gayi!\nMain: Sach mein? Kaun hai?\nDost: Woh jo online game mein mili thi! 🎮😂",
+  "😆 Dost: Yaar, exam mein pass ho gaya!\nMain: Kaise?\nDost: Sir ne kaha — tum bahar jao, main tumhe pass kar deta hoon! 😂",
+  "😂 Dost: Yaar, mujhe bhookh lagi hai.\nMain: Toh kha le na!\nDost: Tere ghar pe aau? 😋😂",
+  "🤣 Dost: Yaar, mujhe neend aa rahi hai.\nMain: Toh so ja!\nDost: Tere ghar pe aau? 😴😂",
+  "😆 Dost: Yaar, mujhe paisa chahiye.\nMain: Kitna?\nDost: Jitna tere paas hai! 💰😂",
+  "😂 Dost: Yaar, meri shaadi ho rahi hai.\nMain: Congratulations!\nDost: Toh tu gift kya de raha hai?\nMain: Main khud aa raha hoon — wahi gift hai! 🎁😂",
+  "🤣 Dost: Yaar, mujhe padhai nahi karne ka mann.\nMain: Toh mat kar!\nDost: Tere ghar pe aake karu? 📚😂",
+  "😆 Dost: Yaar, mujhe tera phone chahiye.\nMain: Kyun?\nDost: Mujhe bhi waisa hi chahiye! 📱😂",
+  "😂 Dost: Yaar, tu mera best friend hai.\nMain: Toh?\nDost: Toh mujhe 1000 rupaye de! 💸😂",
+  "🤣 Santa: Doctor, mujhe bhoolne ki bimari hai.\nDoctor: Kab se hai?\nSanta: Kya kab se hai? 😂",
+  "😂 Santa: Banta, tu kitna padha hai?\nBanta: Main 10th pass hoon.\nSanta: Main 12th pass hoon.\nBanta: Toh phir tu mujhse bada hai! 😅",
+  "😆 Santa: Banta, mujhe ek sawaal ka jawab de.\nBanta: Pooch.\nSanta: Agar main chup rahunga toh kya hoga?\nBanta: Toh main bhi chup rahunga! 🤐😂",
+  "😂 Santa: Banta, mera dimaag kharab ho gaya hai.\nBanta: Toh doctor ke paas ja.\nSanta: Doctor ke paas gaya, usne kaha — mera bhi kharab hai! 🤣",
+  "🤣 Santa: Banta, mujhe neend nahi aa rahi.\nBanta: Toh so ja.\nSanta: So raha hoon, par neend nahi aa rahi! 😴😂",
+  "😆 Santa: Banta, mujhe bhookh lagi hai.\nBanta: Toh kha le.\nSanta: Kha raha hoon, par bhookh nahi ja rahi! 😂",
+  "😂 Santa: Banta, mujhe paisa chahiye.\nBanta: Kitna?\nSanta: Jitna tere paas hai.\nBanta: Toh main kya karunga? 💰😂",
+  "🤣 Santa: Banta, mujhe gaadi chahiye.\nBanta: Toh le le.\nSanta: Le raha hoon, par paisa nahi hai! 🚗😂",
+  "😆 Santa: Banta, mujhe shaadi karni hai.\nBanta: Toh kar le.\nSanta: Kar raha hoon, par ladki nahi mil rahi! 💍😂",
+  "😂 Santa: Banta, mujhe job chahiye.\nBanta: Toh dhoondh le.\nSanta: Dhoondh raha hoon, par koi de nahi raha! 💼😂",
+  "😂 WiFi password: MainNahiBataunga 😎",
+  "🤣 Mera dimaag: Padhai karo.\nMain: Chup reh, main jaanta hoon! 😂",
+  "😆 Mummy: Beta, kuch kaam karo.\nMain: Mummy, main kaam kar raha hoon — bas dikh nahi raha! 😅",
+  "😂 Aaj maine gym join kiya — bas join kiya, jaana nahi! 🏋️😂",
+  "🤣 Meri bank balance: ₹0.\nMeri himmat: ₹infinite! 💪😂",
+  "😆 Mera favourite exercise: Uthna aur phir sona! 😴😂",
+  "😂 Main padhai karne baitha tha — phir 2 ghante baad utha! 📚😅",
+  "🤣 Mera phone: 1% battery.\nMain: 5 ghante aur chalega! 📱😂",
+  "😆 Mummy: Beta, tumhare marks kitne hain?\nMain: Mummy, marks kam hain par confidence zyada! 😎",
+  "😂 Mera best friend: WiFi.\nMera worst enemy: Password! 😂",
+  "❤️ Tum mujhe kitna pyaar karti ho?\nBilkul chai jaisa — bina chai ke din shuru nahi hota! ☕😂",
+  "💕 Tumhari aankhen bahut pyari hain.\nTum bhi bahut pyare ho — bas tumhare dimaag ki battery kam hai! 🔋😂",
+  "❤️ Main tumse roz milna chahta hoon.\nMain bhi — bas tumhari mummy ki nazar se bach jao! 😅",
+  "💕 Tumhare bina main adhoora hoon.\nTumhare saath bhi thoda kam ho — bas tumhari baaton se! 😂",
+  "❤️ Tum meri jaan ho.\nToh phir meri bijli ka bill kyun nahi bharte? ⚡😂",
+  "💕 Main tumse shaadi karna chahta hoon.\nMain bhi — bas pehle tumhari salary check kar leti hoon! 💰😂",
+  "❤️ Tum mujhe miss karti ho?\nHar second — bas WiFi off ho toh zyada! 📶😂",
+  "💕 Tumhare liye main kuch bhi kar sakta hoon.\nToh phir meri chocolate la do! 🍫😂",
+  "❤️ Tum meri duniya ho.\nToh phir meri duniya ka kiraaya kaun dega? 🏠😂",
+  "💕 Main tumhe kabhi nahi chhodunga.\nMain bhi — bas tumhari baatein chhod do! 🗣️😂",
+  "😂 Papa: Beta, tumhara future plan kya hai?\nBeta: Papa, main topper banunga!\nPapa: Toh padhai kab shuru karoge?\nBeta: Papa, pehle plan complete karne do! 📝😂",
+  "🤣 Mummy: Beta, tumne apni sister ki madad ki?\nBeta: Mummy, maine usse homework karne diya!\nMummy: Woh madad nahi hai!\nBeta: Mummy, usne bhi toh mujhe game khelne diya! 🎮😂",
+  "😆 Chhoti behen: Bhaiya, mujhe chocolate do.\nBhaiya: Pehle batao, main kitna handsome hoon?\nBehen: Bhaiya, chocolate chahiye toh jhooth bolna padega! 🍫😂",
+  "😂 Mummy: Beta, tumne apne kamre ki safai ki?\nBeta: Mummy, maine toh ise 'creative mess' ka naam de diya hai! 🎨😂",
+  "🤣 Papa: Beta, tumhe sharm nahi aati?\nBeta: Papa, sharm toh meri behen ko aati hai — main toh expert hoon! 😎😂",
+  "😆 Mummy: Beta, tum roz phone pe kya karte ho?\nBeta: Mummy, main research kar raha hoon — social media ka! 📱😂",
+  "😂 Papa: Beta, tumhara dost kaisa hai?\nBeta: Papa, woh bahut intelligent hai — usne mujhse copy karke pass ho gaya! 😂",
+  "🤣 Mummy: Beta, tumne apna lunch kha liya?\nBeta: Mummy, maine lunch nahi, sirf tiffin khola! 🍱😂",
+  "😆 Papa: Beta, tumhara result kab aayega?\nBeta: Papa, result toh aayega — bas pass hone ka intezaar hai! 😅",
+  "😂 Mummy: Beta, tumne apni book kahan rakhi?\nBeta: Mummy, maine usse 'khoj' mein daal diya hai! 📚😂",
+  "🤣 Teacher: Tumne apna assignment kyun nahi kiya?\nStudent: Sir, maine socha aap check nahi karoge!\nTeacher: Achha, toh ab double homework milega! 😂",
+  "😆 Teacher: Tumhe kis subject mein interest hai?\nStudent: Sir, lunch break mein sabse zyada! 🍱😂",
+  "😂 Teacher: Tumne apni exam copy kyun blank di?\nStudent: Sir, maine socha aapko padhne mein aaram rahega! 😂",
+  "🤣 Teacher: Tumhara favourite teacher kaun hai?\nStudent: Sir, jo sabse kam homework deta hai! 😎😂",
+  "😆 Teacher: Tumne apna project kahan se banaya?\nStudent: Sir, internet se — Google ne bola tha! 🌐😂",
+  "😂 Teacher: Tumne apni uniform kyun nahi pehni?\nStudent: Sir, aaj casual Friday hai! 😎😂",
+  "🤣 Teacher: Tumne apni class kyun bunk ki?\nStudent: Sir, maine socha aapko rest de doon! 😂",
+  "😆 Teacher: Tumhe kis cheez ka dar lagta hai?\nStudent: Sir, sirf exam ke result ka! 😨😂",
+  "😂 Teacher: Tumne apna homework kahan likha?\nStudent: Sir, maine usse yaad kar liya — likhna bhool gaya! 🧠😂",
+  "🤣 Teacher: Tumne apni test copy kyun nahi di?\nStudent: Sir, maine socha aapko checking se bachaa doon! 😂",
+  "😂 Doctor: Tumhe kya problem hai?\nPatient: Doctor, mujhe sab yaad nahi rehta.\nDoctor: Kab se?\nPatient: Kya kab se? 😂",
+  "🤣 Doctor: Tumne apni dawai kyun nahi li?\nPatient: Doctor, maine usse dekh liya tha — usne mujhe nahi dekha! 😂",
+  "😆 Doctor: Tumhe kitni neend aati hai?\nPatient: Doctor, maine aapki baat sunte hue hi sona shuru kar diya! 😴😂",
+  "😂 Doctor: Tumhara blood pressure high hai.\nPatient: Doctor, maine aapka bill dekha toh aur high ho gaya! 💸😂",
+  "🤣 Doctor: Tumhe exercise karni chahiye.\nPatient: Doctor, main roz apni biwi ki baatein sunta hoon — wahi exercise hai! 😂",
+  "😆 Doctor: Tumhe kitna dard hai?\nPatient: Doctor, jitna aapka injection! 💉😂",
+  "😂 Doctor: Tumne apna weight check kiya?\nPatient: Doctor, maine apni biwi ka weight check kiya — mera toh bhool gaya! 😂",
+  "🤣 Doctor: Tumhe aaram chahiye.\nPatient: Doctor, main toh aaram hi karta hoon — bas kaam nahi karta! 😂",
+  "😆 Doctor: Tumhe operation ki zaroorat hai.\nPatient: Doctor, pehle bill batao — phir sochunga! 💸😂",
+  "😂 Doctor: Tum theek ho jayoge.\nPatient: Doctor, aapki himmat ne mujhe theek kar diya! 😂",
+  "😂 Boss: Tumne apna kaam kyun nahi kiya?\nEmployee: Sir, maine socha aapko surprise doon! 😂",
+  "🤣 Boss: Tumne apni meeting miss kyun ki?\nEmployee: Sir, maine socha aapko akele bolne doon! 😂",
+  "😆 Boss: Tumhe salary chahiye?\nEmployee: Sir, main toh salary ke bina bhi kaam kar sakta hoon — bas ek baar try karke dekho! 😂",
+  "😂 Boss: Tumne apna leave form kyun nahi diya?\nEmployee: Sir, maine socha aap khud bol denge! 😂",
+  "🤣 Boss: Tumne apna target kyun nahi kiya?\nEmployee: Sir, maine socha target ko bhi break chahiye! 😂",
+  "😆 Boss: Tumhe promotion chahiye?\nEmployee: Sir, main toh aapki kursi chahta hoon! 😂",
+  "😂 Boss: Tumne apna report kyun nahi bheja?\nEmployee: Sir, maine socha aapko padhne ka time mile! 😂",
+  "🤣 Boss: Tumne apna lunch kyun nahi kiya?\nEmployee: Sir, maine socha kaam kar loon — bhool gaya! 😂",
+  "😆 Boss: Tumne apna phone kyun nahi uthaya?\nEmployee: Sir, maine socha aapko rest de doon! 😂",
+  "😂 Boss: Tumhe bonus chahiye?\nEmployee: Sir, main toh bonus ke bina bhi khush hoon — bas ek baar de do! 😂",
+  "😂 Dost: Yaar, mujhe teri madad chahiye.\nMain: Batao kya karna hai?\nDost: Mujhe paise chahiye.\nMain: Yeh madad nahi, loan hai! 😂",
+  "🤣 Dost: Yaar, mujhe tera phone chahiye.\nMain: Kyun?\nDost: Mujhe bhi waisa hi chahiye! 😂",
+  "😆 Dost: Yaar, mujhe teri bike chahiye.\nMain: Kyun?\nDost: Mujhe bhi ghoomna hai! 😂",
+  "😂 Dost: Yaar, mujhe teri help chahiye.\nMain: Batao kya karna hai?\nDost: Mujhe teri salary chahiye! 😂",
+  "🤣 Dost: Yaar, mujhe tera laptop chahiye.\nMain: Kyun?\nDost: Mujhe bhi game khelna hai! 😂",
+  "😆 Dost: Yaar, mujhe tera time chahiye.\nMain: Kitna?\nDost: Jitna tere paas hai! 😂",
+  "😂 Dost: Yaar, mujhe teri smile chahiye.\nMain: Kyun?\nDost: Mujhe bhi khush hona hai! 😂",
+  "🤣 Dost: Yaar, mujhe tera ghar chahiye.\nMain: Kyun?\nDost: Mujhe bhi rehna hai! 😂",
+  "😆 Dost: Yaar, mujhe teri car chahiye.\nMain: Kyun?\nDost: Mujhe bhi ghoomna hai! 😂",
+  "😂 Dost: Yaar, mujhe tera dil chahiye.\nMain: Kyun?\nDost: Mujhe bhi pyaar karna hai! 😂",
+  "😂 Mummy: Beta, tumne apna homework kiya?\nBeta: Mummy, maine socha aapko surprise doon! 😂",
+  "🤣 Mummy: Beta, tumne apna kamra saaf kiya?\nBeta: Mummy, maine socha aapko khush kar doon! 😂",
+  "😆 Mummy: Beta, tumne apni behen ki madad ki?\nBeta: Mummy, maine socha aapko proud feel karwa doon! 😂",
+  "😂 Mummy: Beta, tumne apna lunch kha liya?\nBeta: Mummy, maine socha aapko bata doon — bhool gaya! 😂",
+  "🤣 Mummy: Beta, tumne apni dawai li?\nBeta: Mummy, maine socha aapko yaad dilwa doon! 😂",
+  "😆 Mummy: Beta, tumne apna phone kahan rakha?\nBeta: Mummy, maine socha aap dhoondh lo! 😂",
+  "😂 Mummy: Beta, tumne apni chappal pehni?\nBeta: Mummy, maine socha aap dekhogi! 😂",
+  "🤣 Mummy: Beta, tumne apna doodh piya?\nBeta: Mummy, maine socha aapko bata doon! 😂",
+  "😆 Mummy: Beta, tumne apni kitab padhi?\nBeta: Mummy, maine socha aapko suna doon! 😂",
+  "😂 Mummy: Beta, tumne apna result dekha?\nBeta: Mummy, maine socha aap dekhogi! 😂"
+];
+
+// ============================================================
+// RUN
+// ============================================================
+module.exports.run = async function ({ api, event }) {
+  const { threadID, messageID } = event;
+
+  try {
+    // Random joke pick
+    const randomJoke = JOKES[Math.floor(Math.random() * JOKES.length)];
+
+    // Image
+    const imgLink = "https://i.imgur.com/l5xNpRB.jpeg";
+    const cacheDir = __dirname + "/cache";
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+    const imgPath = cacheDir + `/joke_${Date.now()}.jpg`;
+
+    const callback = () => {
+      api.sendMessage(
+        {
+          body: `╭─❖ 𝐉𝐎𝐊𝐄 𝐓𝐈𝐌𝐄 ❖─╮\n${randomJoke}\n╰───────────────╯\n😂 𝐄𝐧𝐣𝐨𝐲! 😂`,
+          attachment: fs.createReadStream(imgPath)
+        },
+        threadID,
+        () => {
+          if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+        },
+        messageID
+      );
+    };
+
+    request(encodeURI(imgLink))
+      .pipe(fs.createWriteStream(imgPath))
+      .on("close", callback)
+      .on("error", () => {
+        api.sendMessage(randomJoke, threadID, messageID);
+      });
+
+  } catch (error) {
+    console.error("[JOKE ERROR]", error);
+    api.sendMessage(
+      "❌ Joke load karne mein error aaya! Try again.",
+      threadID,
+      messageID
+    );
+  }
+};

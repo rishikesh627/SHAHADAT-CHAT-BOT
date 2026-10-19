@@ -16,7 +16,7 @@ module.exports.run = async function ({ api, event, args }) {
 
         if (!prompt) {
             return api.sendMessage(
-                "🎨 AI theme generate korar jonno prompt din!",
+                "🎨 Please provide a prompt to generate an AI theme!",
                 event.threadID,
                 event.messageID
             );
@@ -27,7 +27,7 @@ module.exports.run = async function ({ api, event, args }) {
             typeof api.setThreadTheme !== "function"
         ) {
             return api.sendMessage(
-                "❌ Tomar FCA version-e AI Theme support available nei!",
+                "❌ AI Theme support is not available in your FCA version!",
                 event.threadID,
                 event.messageID
             );
@@ -35,7 +35,7 @@ module.exports.run = async function ({ api, event, args }) {
 
         const waitMsg = await new Promise(resolve => {
             api.sendMessage(
-                `⏳ AI diye "${prompt}" theme generate kora hocche...`,
+                `⏳ Generating theme for "${prompt}" using AI...`,
                 event.threadID,
                 (err, info) => resolve(info || null)
             );
@@ -62,7 +62,7 @@ module.exports.run = async function ({ api, event, args }) {
 
         if (!themeResult || !themeResult.themeId) {
             return api.sendMessage(
-                "❌ AI theme generate kora jayni! Onno prompt diye try korun.",
+                "❌ Could not generate AI theme! Try with a different prompt.",
                 event.threadID,
                 event.messageID
             );
@@ -74,7 +74,7 @@ module.exports.run = async function ({ api, event, args }) {
             api.sendMessage(
                 "🎨 AI Theme Generated\n\n" +
                 `Theme: ${themeName}\n\n` +
-                "👍 Ei message-e je kono reaction din apply korar jonno.",
+                "👍 React to this message to apply it.",
                 event.threadID,
                 (err, info) => resolve(info || null)
             );
@@ -110,7 +110,7 @@ module.exports.run = async function ({ api, event, args }) {
         console.error("[AITHEME ERROR]:", error);
 
         return api.sendMessage(
-            `❌ AI Theme generate korte problem hoyeche: ${
+            `❌ There was a problem generating the AI theme: ${
                 error.message || error
             }`,
             event.threadID,

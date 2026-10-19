@@ -231,17 +231,17 @@ module.exports.handleEvent = async function ({ api, event }) {
       male: "Good night भाई, Sweet Dream 😴",
       female: "Sweet Dream जानू… पर पहले बॉस साहू को GN बोल देना 😏💤"
     },
-    "tor ball": {
+    "ball": {
       male: "~ अभी तक तेरी बॉल नहीं उठी क्या?? 🤖",
       female: "~ ये सब लड़कियों के लिए नहीं होता जानू 🤭"
     },
-    "sahu": {
+    "rishi": {
       male: "वो अभी बिज़ी हैं भाई, कुछ काम है तो बताओ 😎",
       female: "वो अभी बिज़ी हैं जानू, कुछ कहना हो तो मुझे बता सकती हो..!😘"
     },
     "owner": {
-      male: "‎[𝐎𝐖𝐍𝐄𝐑:☞ SHAHADAT SAHU ☜\nFacebook: https://www.facebook.com/profile.php?id=100044713412032\nWhatsApp: +8801882333052",
-      female: "‎[𝐎𝐖𝐍𝐄𝐑:☞ SHAHADAT SAHU ☜\nFacebook: https://www.facebook.com/profile.php?id=100044713412032\nWhatsApp: +8801882333052"
+      male: "‎[𝐎𝐖𝐍𝐄𝐑:☞ Rishikesh ☜\nFacebook: https://m.me/hello.baby1222\nInstagram: https://www.instagram.com/rishu2328648?rpxt=amtxZ3hpa2czZGJp",
+      female: "‎[𝐎𝐖𝐍𝐄𝐑:☞ Rishikesh ☜\nFacebook: https://m.me/hello.baby1222\nInstagaram: +https://www.instagram.com/rishu2328648?rpxt=amtxZ3hpa2czZGJp"
     },
     "admin": {
       male: "वो SHAHADAT SAHU हैं भाई, सब Admin SAHU कहते हैं 😎",

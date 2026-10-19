@@ -7,7 +7,7 @@ module.exports.config = {
   version: "1.0.1",
   hasPermssion: 0,
   credits: "SHAHADAT SAHU",
-  description: "Show Owner Info with random photo",
+  description: "Show Owner Info with photo",
   commandCategory: "Information",
   usages: "owner",
   cooldowns: 2
@@ -38,15 +38,8 @@ m.me/hello.baby1222
 wa.me/@rishikesh9980
 `;
 
-  const images = [
-    "https://i.imgur.com/hPtliXo.jpeg",
-    "https://i.imgur.com/cwd64Av.jpeg",
-    "https://i.imgur.com/L7txp4M.jpeg",
-    "https://i.imgur.com/5dG8PS5.jpeg"
-  ];
-
-  const randomImg =
-    images[Math.floor(Math.random() * images.length)];
+  // Sirf ek hi fixed image
+  const imageUrl = "https://i.imgur.com/l5xNpRB.jpeg";
 
   const filePath = __dirname + "/cache/owner.jpg";
 
@@ -65,7 +58,7 @@ wa.me/@rishikesh9980
     );
   };
 
-  return request(encodeURI(randomImg))
+  return request(encodeURI(imageUrl))
     .pipe(fs.createWriteStream(filePath))
     .on("close", callback);
 };

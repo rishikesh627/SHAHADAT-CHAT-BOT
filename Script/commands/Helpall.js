@@ -37,21 +37,19 @@ ${allCommands.map(cmd => `║ ➔ ${cmd}`).join("\n")}
 ╠══🔰 𝐁𝐎𝐓 𝐈𝐍𝐅𝐎 🔰══╣
 ║ 🤖 𝐁𝐨𝐭: ${botName}
 ║ 👑 𝐎𝐰𝐧𝐞𝐫:
-║ 𝐒𝐇𝐀𝐇𝐀𝐃𝐀𝐓 𝐒𝐀𝐇𝐔
+║ 𝗥𝗜𝗦𝗛𝗜𝗞𝗘𝗦𝗛
 ║ 📦 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬: ${allCommands.length}
 ╚═══════════════╝`;
 
-  const backgrounds = [
-    "https://i.imgur.com/cwd64Av.jpeg",
-    "https://i.imgur.com/hPtliXo.jpeg",
-    "https://i.imgur.com/L7txp4M.jpeg",
-    "https://i.imgur.com/5dG8PS5.jpeg"
-  ];
+  // Sirf ek hi fixed image
+  const selectedBg = "https://i.imgur.com/l5xNpRB.jpeg";
 
-  const selectedBg =
-    backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  const cacheDir = __dirname + "/cache";
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
 
-  const imgPath = __dirname + "/cache/helpallbg.jpg";
+  const imgPath = cacheDir + "/helpallbg.jpg";
 
   const callback = () => {
     api.sendMessage(

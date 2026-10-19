@@ -83,43 +83,43 @@ module.exports.handleEvent = async function ({
       name =
         await Users.getNameUser(senderID);
     } catch (e) {
-      name = "বন্ধু";
+      name = "Friend";
     }
   }
 
   const rankupMessages = [
-    `🎉 আরে বাহ! কেল্লাফতে! 😂
+    `🎉 Wow! Awesome! 😂
 
 👤 {name}
-📈 তোমার Rank এখন Level {level}!
+📈 Your Rank is now Level {level}!
 
-এত মেসেজ করছো কেন ভাই? 🐸
-Messenger কি বাসা থেকে Wi-Fi ফ্রি দিছে নাকি? 🤣
+Why are you sending so many messages, bro? 🐸
+Is Messenger giving you free Wi-Fi from home or what? 🤣
 
-যাই হোক, অভিনন্দন! 🥳
-আরেকটু spam করো, সামনে আরও Level আছে! 🚀`,
+Anyway, congratulations! 🥳
+Spam a little more, there are more Levels ahead! 🚀`,
 
-    `🎉 অভিনন্দন {name}! 😂
+    `🎉 Congratulations {name}! 😂
 
-তুমি Level {level}-এ উঠে গেছো!
+You've reached Level {level}!
 
-এত মেসেজ করার পুরস্কার পেলেও,
-বাস্তব জীবনে এখনো কোনো Achievement আনলক হয়নি! 🐸🤣
+You got a reward for sending so many messages,
+but in real life you still haven't unlocked any Achievement! 🐸🤣
 
-চালিয়ে যাও বস,
-Bot-এর চোখে তুমি এখন VIP! 😎🔥`,
+Keep going boss,
+In the Bot's eyes you're a VIP now! 😎🔥`,
 
     `🚨 Breaking News! 🚨😂
 
-👤 {name} আবার Level Up করেছে!
-📈 নতুন Level: {level}
+👤 {name} has Leveled Up again!
+📈 New Level: {level}
 
-এত মেসেজ করছো দেখে
-Messenger-ও ভাবতেছে,
-"এই মানুষটা কি আর ঘুমায় না?" 🐸🤣
+Seeing you send so many messages,
+even Messenger is thinking,
+"Does this person ever sleep?" 🐸🤣
 
-যাই হোক, অভিনন্দন! 🎉
-আরেকটু চেষ্টা করো, পরের Level-ও তোমার! 🚀`
+Anyway, congratulations! 🎉
+Try a little more, the next Level is yours too! 🚀`
   ];
 
   let message =

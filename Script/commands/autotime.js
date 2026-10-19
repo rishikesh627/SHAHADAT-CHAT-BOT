@@ -370,7 +370,8 @@ module.exports.onLoad = ({ api }) => {
 
     const rule = new schedule.RecurrenceRule();
 
-    rule.tz = "Asia/Dhaka";
+    // ✅ FIXED: Changed from Asia/Dhaka to Asia/Kolkata (India Time)
+    rule.tz = "Asia/Kolkata";
     rule.hour = hour24;
     rule.minute = parseInt(minute, 10);
 
@@ -388,7 +389,8 @@ module.exports.onLoad = ({ api }) => {
               console.log(`[AUTOSENT] Failed to send to ${threadID}:`, err.message);
             }
           });
-        }, index * 2000);
+          // ✅ FIXED: Increased delay from 2000 (2s) to 5000 (5s) to prevent spam ban
+        }, index * 5000); 
       });
     });
   });

@@ -3,15 +3,28 @@ const path = require("path");
 
 module.exports.config = {
   name: "autoreact",
-  version: "9.0.0",
+  version: "9.1.0",
   hasPermssion: 0,
   credits: "SHAHADAT SAHU",
-  description: "Ultimate Masti Bot v9 - Jokes + Shayari + Gender-based React!",
+  description: "Ultimate Masti Bot v9.1 - Jokes + Shayari + Gender-based React!",
   commandCategory: "FUN",
   usages: "[.masti status]",
   cooldowns: 1,
   usePrefix: true
 };
+
+/* ==================== STATS INIT HELPER ==================== */
+function initStats() {
+  if (!global.mastiStats) {
+    global.mastiStats = {
+      totalReactions: 0, total: 0,
+      majak: 0, masti: 0, flirt: 0, shayri: 0,
+      maleReplies: 0, femaleReplies: 0, unknownReplies: 0,
+      love: 0, sad: 0, angry: 0, india: 0, greet: 0
+    };
+  }
+  return global.mastiStats;
+}
 
 /* ==================== GENDER STORAGE ==================== */
 const GENDER_FILE = path.join(__dirname, "cache", "gender.json");
@@ -280,16 +293,14 @@ const shayariDB = {
   ]
 };
 
-/* ==================== MALE/FEMALE VARIANT ==================== */
-// Gender के हिसाब से prefix जोड़ें
+/* ==================== GENDER PREFIX (FIXED) ==================== */
 function addGenderPrefix(text, gender, firstName) {
-  if (!firstName || firstName === "Unknown") firstName = "";
-  const tag = firstName ? ` ${firstName}` : "";
+  const name = (!firstName || firstName === "Unknown") ? "" : firstName;
 
   if (gender === "female") {
-    return `👩 *${firstName || "जानू"}*,\n\n${text}`;
+    return `👩 *${name || "जानू"}*,\n\n${text}`;
   } else if (gender === "male") {
-    return `👨 *${firstName || "भाई"}*,\n\n${text}`;
+    return `👨 *${name || "भाई"}*,\n\n${text}`;
   }
   return text;
 }
@@ -301,67 +312,59 @@ const emojiMap = {
   '💞': 'love', '💝': 'love', '💟': 'love', '🥰': 'love', '😍': 'love', '😘': 'love',
   '😢': 'sad', '😭': 'sad', '🥺': 'sad', '😔': 'sad', '😞': 'sad', '😟': 'sad',
   '😡': 'angry', '🤬': 'angry', '👿': 'angry', '💢': 'angry', '😠': 'angry',
-  '🔥': 'fire', '💯': 'fire', '⚡': 'fire', '💪': 'fire',
+  '🔥': 'fun', '💯': 'fun', '⚡': 'fun', '💪': 'fun',
   '👍': 'like', '👎': 'like', '👌': 'like',
   '😎': 'cool', '🕶️': 'cool',
-  '🤪': 'crazy', '😜': 'crazy', '😝': 'crazy',
-  '😪': 'sleep', '😴': 'sleep',
-  '🙏': 'pray', '🤲': 'pray',
-  '👋': 'hi', '✋': 'hi',
-  '🎂': 'birthday', '🥳': 'party', '🎉': 'party',
+  '🤪': 'fun', '😜': 'fun', '😝': 'fun',
+  '😪': 'sad', '😴': 'sad',
+  '🙏': 'greet', '🤲': 'greet',
+  '👋': 'greet', '✋': 'greet',
+  '🎂': 'party', '🥳': 'party', '🎉': 'party',
   '🍕': 'food', '🍔': 'food', '🌭': 'food',
   '🥤': 'drink', '🍺': 'drink', '☕': 'tea',
   '🎮': 'game', '🕹️': 'game',
   '🐶': 'animal', '🐱': 'animal', '🐼': 'animal',
   '🌹': 'rose', '🌸': 'flower', '🌈': 'rainbow',
-  '👻': 'ghost', '💀': 'skull',
+  '👻': 'fun', '💀': 'fun',
   '🎁': 'gift', '🎀': 'gift',
   '⚽': 'sports', '🏀': 'sports',
   '💃': 'dance', '🕺': 'dance',
   '📚': 'study', '📖': 'study',
-  '🚀': 'rocket', '✈️': 'plane',
-  '👀': 'look', '👁️': 'eye',
+  '🚀': 'fun', '✈️': 'fun',
+  '👀': 'look', '👁️': 'look',
   '🤔': 'think', '🧐': 'think'
 };
 
 /* ==================== RUN (Status Command) ==================== */
-module.exports.run = function ({ api, event, args }) {
+module.exports.run = function ({ api, event }) {
   const { threadID } = event;
-
-  if (!global.mastiStats) {
-    global.mastiStats = {
-      totalReactions: 0, total: 0,
-      majak: 0, masti: 0, flirt: 0, shayri: 0,
-      maleReplies: 0, femaleReplies: 0, unknownReplies: 0,
-      love: 0, sad: 0, angry: 0, cool: 0, india: 0, greet: 0
-    };
-  }
+  const stats = initStats();
 
   const statusMsg =
-    `🎉 *ULTIMATE MASTI BOT v9.0* 🎉\n\n` +
+    `🎉 *ULTIMATE MASTI BOT v9.1* 🎉\n\n` +
     `✅ *Status:* हमेशा ON\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
     `📊 *TOTAL STATS:*\n` +
-    `• Total Reactions: ${global.mastiStats.totalReactions}\n` +
-    `• Total Replies: ${global.mastiStats.total}\n` +
+    `• Total Reactions: ${stats.totalReactions}\n` +
+    `• Total Replies: ${stats.total}\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
     `🎭 *REPLY TYPES:*\n` +
-    `😂 Majak: ${global.mastiStats.majak}\n` +
-    `🥳 Masti: ${global.mastiStats.masti}\n` +
-    `😘 Flirt: ${global.mastiStats.flirt}\n` +
-    `💫 Shayri: ${global.mastiStats.shayri}\n` +
+    `😂 Majak: ${stats.majak}\n` +
+    `🥳 Masti: ${stats.masti}\n` +
+    `😘 Flirt: ${stats.flirt}\n` +
+    `💫 Shayri: ${stats.shayri}\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
     `👥 *GENDER STATS:*\n` +
-    `👨 Male: ${global.mastiStats.maleReplies}\n` +
-    `👩 Female: ${global.mastiStats.femaleReplies}\n` +
-    `🤖 Unknown: ${global.mastiStats.unknownReplies}\n` +
+    `👨 Male: ${stats.maleReplies}\n` +
+    `👩 Female: ${stats.femaleReplies}\n` +
+    `🤖 Unknown: ${stats.unknownReplies}\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
     `📝 *CATEGORY STATS:*\n` +
-    `❤️ Love: ${global.mastiStats.love}\n` +
-    `😢 Sad: ${global.mastiStats.sad}\n` +
-    `😡 Angry: ${global.mastiStats.angry}\n` +
-    `🇮🇳 India: ${global.mastiStats.india}\n` +
-    `🌅 Greet: ${global.mastiStats.greet}\n` +
+    `❤️ Love: ${stats.love}\n` +
+    `😢 Sad: ${stats.sad}\n` +
+    `😡 Angry: ${stats.angry}\n` +
+    `🇮🇳 India: ${stats.india}\n` +
+    `🌅 Greet: ${stats.greet}\n` +
     `━━━━━━━━━━━━━━━━━━\n` +
     `👑 *Credit:* SHAHADAT SAHU`;
 
@@ -382,14 +385,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
   if (!loopGuard.check(api, event)) return;
 
   try {
-    if (!global.mastiStats) {
-      global.mastiStats = {
-        totalReactions: 0, total: 0,
-        majak: 0, masti: 0, flirt: 0, shayri: 0,
-        maleReplies: 0, femaleReplies: 0, unknownReplies: 0,
-        love: 0, sad: 0, angry: 0, cool: 0, india: 0, greet: 0
-      };
-    }
+    const stats = initStats();
 
     /* ----- Gender पहचानो ----- */
     const gender = await getUserGender(api, senderID);
@@ -397,13 +393,18 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     let userName = "Unknown";
     let firstName = "";
     try {
-      userName = await Users.getNameUser(senderID);
+      if (Users?.getNameUser) {
+        userName = await Users.getNameUser(senderID);
+      } else {
+        const info = await api.getUserInfo(senderID);
+        userName = info[senderID]?.name || "Unknown";
+      }
       firstName = (userName || "").split(" ")[0] || "";
     } catch {}
 
-    if (gender === "female") global.mastiStats.femaleReplies++;
-    else if (gender === "male") global.mastiStats.maleReplies++;
-    else global.mastiStats.unknownReplies++;
+    if (gender === "female") stats.femaleReplies++;
+    else if (gender === "male") stats.maleReplies++;
+    else stats.unknownReplies++;
 
     /* ----- Category detect ----- */
     let detectedCategory = null;
@@ -414,7 +415,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       if (msgLower.includes(word)) {
         detectedCategory = "love";
         reactionEmoji = "❤️";
-        global.mastiStats.love++;
+        stats.love++;
         break;
       }
     }
@@ -425,7 +426,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
         if (msgLower.includes(word)) {
           detectedCategory = "sad";
           reactionEmoji = "😢";
-          global.mastiStats.sad++;
+          stats.sad++;
           break;
         }
       }
@@ -437,7 +438,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
         if (msgLower.includes(word)) {
           detectedCategory = "angry";
           reactionEmoji = "😡";
-          global.mastiStats.angry++;
+          stats.angry++;
           break;
         }
       }
@@ -449,7 +450,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
         if (msgLower.includes(word) || msg.includes("🇮🇳")) {
           detectedCategory = "india";
           reactionEmoji = "🇮🇳";
-          global.mastiStats.india++;
+          stats.india++;
           break;
         }
       }
@@ -461,7 +462,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
         if (msgLower.includes(word)) {
           detectedCategory = "greet";
           reactionEmoji = "🌅";
-          global.mastiStats.greet++;
+          stats.greet++;
           break;
         }
       }
@@ -473,7 +474,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
         if (msgLower.includes(word)) {
           detectedCategory = "fun";
           reactionEmoji = "😂";
-          global.mastiStats.masti++;
+          stats.masti++;
           break;
         }
       }
@@ -494,65 +495,48 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     if (detectedCategory && reactionEmoji) {
       try {
         await api.setMessageReaction(reactionEmoji, event.messageID);
-        global.mastiStats.totalReactions++;
+        stats.totalReactions++;
       } catch {}
     }
 
-    // 95% chance reply
-    if (detectedCategory && Math.random() < 0.95) {
+    // 50% chance reply (spam कम करने के लिए)
+    if (detectedCategory && Math.random() < 0.5) {
       let replyMessage = "";
       let replyType = "masti";
 
-      const isJoke = Math.random() < 0.7;
+      const useJoke = Math.random() < 0.7;
+      const pool = useJoke ? jokesDB : shayariDB;
 
-      if (isJoke) {
-        if (detectedCategory === "love" && jokesDB.love) {
-          replyMessage = jokesDB.love[Math.floor(Math.random() * jokesDB.love.length)];
-          replyType = "flirt";
-        } else if (detectedCategory === "sad" && jokesDB.sad) {
-          replyMessage = jokesDB.sad[Math.floor(Math.random() * jokesDB.sad.length)];
-          replyType = "sad";
-        } else if (detectedCategory === "angry" && jokesDB.angry) {
-          replyMessage = jokesDB.angry[Math.floor(Math.random() * jokesDB.angry.length)];
-          replyType = "majak";
-        } else if (detectedCategory === "india" && jokesDB.india) {
-          replyMessage = jokesDB.india[Math.floor(Math.random() * jokesDB.india.length)];
-        } else if (detectedCategory === "fun" && jokesDB.fun) {
-          replyMessage = jokesDB.fun[Math.floor(Math.random() * jokesDB.fun.length)];
-        } else {
-          replyMessage = jokesDB.general[Math.floor(Math.random() * jokesDB.general.length)];
-        }
+      replyMessage = pool[detectedCategory]?.[Math.floor(Math.random() * pool[detectedCategory].length)]
+                   || jokesDB.general[Math.floor(Math.random() * jokesDB.general.length)];
+
+      if (useJoke) {
+        if (detectedCategory === "love") replyType = "flirt";
+        else if (detectedCategory === "sad") replyType = "sad";
+        else if (detectedCategory === "angry") replyType = "majak";
+        else if (detectedCategory === "fun") replyType = "masti";
       } else {
-        if (detectedCategory === "love" && shayariDB.love) {
-          replyMessage = shayariDB.love[Math.floor(Math.random() * shayariDB.love.length)];
-          replyType = "shayri";
-        } else if (detectedCategory === "sad" && shayariDB.sad) {
-          replyMessage = shayariDB.sad[Math.floor(Math.random() * shayariDB.sad.length)];
-        } else if (detectedCategory === "angry" && shayariDB.angry) {
-          replyMessage = shayariDB.angry[Math.floor(Math.random() * shayariDB.angry.length)];
-          replyType = "shayri";
-        } else if (detectedCategory === "fun" && shayariDB.fun) {
-          replyMessage = shayariDB.fun[Math.floor(Math.random() * shayariDB.fun.length)];
-        } else {
-          replyMessage = shayariDB.love[Math.floor(Math.random() * shayariDB.love.length)];
-          replyType = "shayri";
-        }
+        replyType = "shayri";
       }
 
       // Gender-based prefix
       replyMessage = addGenderPrefix(replyMessage, gender, firstName);
 
-      if (replyType === "majak") global.mastiStats.majak++;
-      else if (replyType === "masti") global.mastiStats.masti++;
-      else if (replyType === "flirt") global.mastiStats.flirt++;
-      else if (replyType === "shayri") global.mastiStats.shayri++;
+      if (replyType === "majak") stats.majak++;
+      else if (replyType === "masti") stats.masti++;
+      else if (replyType === "flirt") stats.flirt++;
+      else if (replyType === "shayri") stats.shayri++;
 
-      global.mastiStats.total++;
+      stats.total++;
 
-      await api.sendMessage(replyMessage, threadID);
+      // Random delay 1.5 - 4 sec (bot जैसा न लगे)
+      const delay = 1500 + Math.random() * 2500;
+      setTimeout(() => {
+        api.sendMessage(replyMessage, threadID).catch(() => {});
+      }, delay);
     }
 
   } catch (error) {
-    console.log("[MASTI v9] Error:", error.message);
+    console.log("[MASTI v9.1] Error:", error.message);
   }
 };

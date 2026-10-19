@@ -7,7 +7,7 @@ module.exports.config = {
     version: "1.2.0",
     hasPermssion: 0,
     credits: "SHAHADAT SAHU",
-    description: "Auto resend removed messages",
+    description: "हटाए गए संदेशों को स्वचालित रूप से फिर से भेजें",
     commandCategory: "general",
     usages: "[on/off]",
     cooldowns: 0,
@@ -58,7 +58,7 @@ module.exports.handleEvent = async function ({ event, api, Users }) {
                 msg.attachment.length === 0
             ) {
                 return api.sendMessage(
-                    `সবাই দেখেন নাও\n${userName} রিমুভ করেছে:\n${msg.msgBody || ""}`,
+                    `सब देख लो\n${userName} ने हटाया:\n${msg.msgBody || ""}`,
                     threadID
                 );
             }
@@ -90,7 +90,7 @@ module.exports.handleEvent = async function ({ event, api, Users }) {
 
             return api.sendMessage(
                 {
-                    body: `সবাই দেখেন নাও\n${userName} রিমুভ করেছে:\n${msg.msgBody || ""}`,
+                    body: `सब देख लो\n${userName} ने हटाया:\n${msg.msgBody || ""}`,
                     attachment: attachmentsList
                 },
                 threadID

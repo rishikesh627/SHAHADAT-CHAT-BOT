@@ -107,7 +107,7 @@ module.exports.run = async function ({ event, api }) {
   } catch (e) {
     return api.sendMessage(
       "GF API Error | SAHU-API unreachable\n" +
-      "API Error, Boss SAHU को call करें",
+      "API Error, Boss Rishikesh को call करें",
       threadID,
       messageID
     );

@@ -113,7 +113,7 @@ module.exports = {
 ┃❖ ${totalDays} Days
 ┃❖ ${totalHours} Hours
 ┣━━━━━━━━━━━━━━━━❂
-┃  𝗖𝗿𝗲𝗮𝘁𝗲𝗱 𝗯𝘆: ─꯭─⃝‌‌𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭
+┃  𝗖𝗿𝗲𝗮𝘁𝗲𝗱 𝗯𝘆: ⸻̅͟ˣ͠𓆩𝐘꯭꘍꯭֟፝͡᪂꘍꯭ 𝐀꯭𖾝꯭꯭𝐌꯭꯭𝐔꯭𓆪꯭ˣ͢ˣ͠𓆩𝐁꯭꯭𝐎꯭꯭𝐓꯭𓆪꯭ˣ͢
 ┗━━━━━━━━━━━━━━━━❂`,
         attachment: fs.createReadStream(avatarPath)
       };

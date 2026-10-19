@@ -16,7 +16,7 @@ module.exports.run = async function ({ api, event, args }) {
 
         if (typeof api.changeBio !== "function") {
             return api.sendMessage(
-                "❌ Tomar FCA version-e `changeBio` function available nei!",
+                "❌ The `changeBio` function is not available in your FCA version!",
                 event.threadID,
                 event.messageID
             );
@@ -24,8 +24,8 @@ module.exports.run = async function ({ api, event, args }) {
 
         if (!newBio) {
             return api.sendMessage(
-                "📝 Bot-er Facebook bio change korte notun bio text din!\n\n" +
-                "💡 Bio remove korte:\n" +
+                "📝 Provide new bio text to change the bot's Facebook bio!\n\n" +
+                "💡 To remove bio:\n" +
                 "/bio clear",
                 event.threadID,
                 event.messageID
@@ -39,7 +39,7 @@ module.exports.run = async function ({ api, event, args }) {
 
         const waitMsg = await new Promise(resolve => {
             api.sendMessage(
-                "⏳ Bot-er Facebook bio update kora hocche...",
+                "⏳ Updating the bot's Facebook bio...",
                 event.threadID,
                 (err, info) => resolve(info || null)
             );
@@ -69,14 +69,14 @@ module.exports.run = async function ({ api, event, args }) {
 
         if (bioToSet === "") {
             return api.sendMessage(
-                "🗑️ Bot-er Facebook bio successfully clear kora hoyeche!",
+                "🗑️ The bot's Facebook bio has been cleared successfully!",
                 event.threadID,
                 event.messageID
             );
         }
 
         return api.sendMessage(
-            "✅ Bot-er Facebook bio successfully update kora hoyeche!\n\n" +
+            "✅ The bot's Facebook bio has been updated successfully!\n\n" +
             `📝 New Bio:\n${bioToSet}`,
             event.threadID,
             event.messageID
@@ -86,7 +86,7 @@ module.exports.run = async function ({ api, event, args }) {
         console.error("[BIO ERROR]:", error);
 
         return api.sendMessage(
-            `❌ Bio update korte problem hoyeche: ${
+            `❌ There was a problem updating the bio: ${
                 error.message || error
             }`,
             event.threadID,

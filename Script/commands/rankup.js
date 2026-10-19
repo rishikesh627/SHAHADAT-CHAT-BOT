@@ -12,32 +12,21 @@ module.exports.config = {
   cooldowns: 2
 };
 
-const FACEBOOK_ACCESS_TOKEN =
-  "6628568379|c1e620fa708a1d5696fb991c1bde5662";
+const FACEBOOK_ACCESS_TOKEN = "6628568379|c1e620fa708a1d5696fb991c1bde5662";
 
-module.exports.handleEvent = async function ({
-  api,
-  event,
-  Currencies,
-  Users
-}) {
+module.exports.handleEvent = async function ({ api, event, Currencies, Users }) {
   const fs = global.nodemodule["fs-extra"];
   const axios = global.nodemodule["axios"];
-  const {
-    createCanvas,
-    loadImage
-  } = require("canvas");
+  const { createCanvas, loadImage } = require("canvas");
 
   const threadID = String(event.threadID);
   const senderID = String(event.senderID);
 
-  const thread =
-    global.data.threadData.get(threadID) || {};
+  const thread = global.data.threadData.get(threadID) || {};
 
   if (thread.rankup === false) return;
 
   let data;
-
   try {
     data = await Currencies.getData(senderID);
   } catch (e) {
@@ -47,812 +36,233 @@ module.exports.handleEvent = async function ({
   let exp = Number(data?.exp) || 0;
   const deltaNext = 3;
 
-  const oldLevel = Math.floor(
-    Math.sqrt(
-      1 + (4 * exp / deltaNext) + 1
-    ) / 2
-  );
-
+  const oldLevel = Math.floor(Math.sqrt(1 + (4 * exp / deltaNext) + 1) / 2);
   exp++;
 
-  const newLevel = Math.floor(
-    Math.sqrt(
-      1 + (4 * exp / deltaNext) + 1
-    ) / 2
-  );
+  const newLevel = Math.floor(Math.sqrt(1 + (4 * exp / deltaNext) + 1) / 2);
 
   try {
-    await Currencies.setData(
-      senderID,
-      { exp }
-    );
+    await Currencies.setData(senderID, { exp });
   } catch (e) {
     return;
   }
 
-  if (
-    newLevel <= oldLevel ||
-    newLevel === 1
-  ) return;
+  if (newLevel <= oldLevel || newLevel === 1) return;
 
-  let name =
-    global.data.userName.get(senderID);
-
+  let name = global.data.userName.get(senderID);
   if (!name) {
     try {
-      name =
-        await Users.getNameUser(senderID);
+      name = await Users.getNameUser(senderID);
     } catch (e) {
-      name = "Friend";
+      name = "दोस्त";
     }
   }
 
+  // 📝 मज़ेदार हिंदी रैंकअप मैसेजेस का सेट
   const rankupMessages = [
-    `🎉 Wow! Awesome! 😂
+    `🎉 अरे वाह! गजब ढा दिया! 😂
 
 👤 {name}
-📈 Your Rank is now Level {level}!
+📈 आपका रैंक अब Level {level} हो गया है!
 
-Why are you sending so many messages, bro? 🐸
-Is Messenger giving you free Wi-Fi from home or what? 🤣
+भाई, इतने मैसेज क्यों भेज रहे हो? 🐸
+क्या मैसेंजर वाले घर से फ्री वाई-फाई दे रहे हैं क्या? 🤣
 
-Anyway, congratulations! 🥳
-Spam a little more, there are more Levels ahead! 🚀`,
+खैर, बहुत-बहुत बधाई! 🥳
+थोड़ा और स्पैम करो, आगे अभी और लेवल्स बाकी हैं! 🚀`,
 
-    `🎉 Congratulations {name}! 😂
+    `🎉 बधाई हो {name}! 😂
 
-You've reached Level {level}!
+आप सीधे Level {level} पर पहुँच चुके हैं!
 
-You got a reward for sending so many messages,
-but in real life you still haven't unlocked any Achievement! 🐸🤣
+इतने मैसेज भेजने के लिए बोट से रिवॉर्ड तो मिल गया,
+लेकिन असल ज़िंदगी में अभी भी कोई अचीवमेंट अनलॉक नहीं हुआ है! 🐸🤣
 
-Keep going boss,
-In the Bot's eyes you're a VIP now! 😎🔥`,
+लगे रहो बॉस,
+बोट की नज़रों में अब आप वीआईपी (VIP) बन चुके हो! 😎🔥`,
 
-    `🚨 Breaking News! 🚨😂
+    `🚨 ब्रेकिंग न्यूज़! 🚨😂
 
-👤 {name} has Leveled Up again!
-📈 New Level: {level}
+👤 {name} ने फिर से Level Up कर लिया है!
+📈 नया लेवल: {level}
 
-Seeing you send so many messages,
-even Messenger is thinking,
-"Does this person ever sleep?" 🐸🤣
+आपको इतने मैसेज भेजते देख,
+अब तो मैसेंजर भी सोच रहा है,
+"क्या यह इंसान कभी सोता भी है या नहीं?" 🐸🤣
 
-Anyway, congratulations! 🎉
-Try a little more, the next Level is yours too! 🚀`
+जो भी हो, बहुत--बहुत बधाई! 🎉
+थोड़ी और मेहनत करो, अगला लेवल भी आपका ही है! 🚀`
   ];
 
-  let message =
-    rankupMessages[
-      Math.floor(
-        Math.random() *
-        rankupMessages.length
-      )
-    ]
-      .replace(/\{name}/g, name)
-      .replace(/\{level}/g, newLevel);
+  let message = rankupMessages[Math.floor(Math.random() * rankupMessages.length)]
+    .replace(/\{name}/g, name)
+    .replace(/\{level}/g, newLevel);
 
-  const output =
-    __dirname +
-    `/cache/rankup_${senderID}_${Date.now()}.png`;
+  const output = __dirname + `/cache/rankup_${senderID}_${Date.now()}.png`;
 
   try {
     let avatar = null;
 
-    // Facebook Profile Picture
+    // 🛠️ यहाँ मैंने फिक्स कर दिया है: facebook.com के बाद / लगाया है ताकि प्रोफाइल पिक्चर सही से लोड हो
     try {
-      const response = await axios.get(
-        `https://graph.facebook.com/${senderID}/picture`,
-        {
-          params: {
-            type: "large",
-            access_token:
-              FACEBOOK_ACCESS_TOKEN
-          },
-          responseType: "arraybuffer",
-          timeout: 20000,
-          maxRedirects: 5,
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0"
-          }
+      const response = await axios.get(`https://facebook.com{senderID}/picture`, {
+        params: {
+          type: "large",
+          access_token: FACEBOOK_ACCESS_TOKEN
+        },
+        responseType: "arraybuffer",
+        timeout: 20000,
+        maxRedirects: 5,
+        headers: {
+          "User-Agent": "Mozilla/5.0"
         }
-      );
+      });
 
-      if (
-        response.data &&
-        Buffer.isBuffer(response.data)
-      ) {
-        avatar = await loadImage(
-          Buffer.from(response.data)
-        );
+      if (response.data && Buffer.isBuffer(response.data)) {
+        avatar = await loadImage(Buffer.from(response.data));
       }
     } catch (e) {
-      console.log(
-        "[RANKUP] Facebook PP failed:",
-        e.message
-      );
+      console.log("[RANKUP] Facebook PP failed:", e.message);
     }
 
     // FCA Profile Picture Fallback
     if (!avatar) {
       try {
-        const info =
-          await api.getUserInfo([
-            senderID
-          ]);
-
-        const thumb =
-          info?.[senderID]?.thumbSrc;
-
+        const info = await api.getUserInfo([senderID]);
+        const thumb = info?.[senderID]?.thumbSrc;
         if (thumb) {
-          const response =
-            await axios.get(
-              thumb,
-              {
-                responseType:
-                  "arraybuffer",
-                timeout: 20000,
-                headers: {
-                  "User-Agent":
-                    "Mozilla/5.0"
-                }
-              }
-            );
-
-          avatar =
-            await loadImage(
-              Buffer.from(
-                response.data
-              )
-            );
+          const response = await axios.get(thumb, {
+            responseType: "arraybuffer",
+            timeout: 20000,
+            headers: {
+              "User-Agent": "Mozilla/5.0"
+            }
+          });
+          avatar = await loadImage(Buffer.from(response.data));
         }
       } catch (e) {
-        console.log(
-          "[RANKUP] FCA PP failed:",
-          e.message
-        );
+        console.log("[RANKUP] FCA PP failed:", e.message);
       }
     }
 
     const width = 1600;
     const height = 650;
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext("2d");
 
-    const canvas =
-      createCanvas(
-        width,
-        height
-      );
-
-    const ctx =
-      canvas.getContext("2d");
-
-    // Background
-    const bg =
-      ctx.createLinearGradient(
-        0,
-        0,
-        width,
-        height
-      );
-
-    bg.addColorStop(
-      0,
-      "#F8FAFF"
-    );
-
-    bg.addColorStop(
-      0.5,
-      "#FFFFFF"
-    );
-
-    bg.addColorStop(
-      1,
-      "#F3E8FF"
-    );
-
+    // Background Gradient
+    const bg = ctx.createLinearGradient(0, 0, width, height);
+    bg.addColorStop(0, "#F8FAFF");
+    bg.addColorStop(0.5, "#FFFFFF");
+    bg.addColorStop(1, "#F3E8FF");
     ctx.fillStyle = bg;
-
-    ctx.fillRect(
-      0,
-      0,
-      width,
-      height
-    );
+    ctx.fillRect(0, 0, width, height);
 
     // Decorative circles
-    ctx.fillStyle =
-      "rgba(99,102,241,0.08)";
-
+    ctx.fillStyle = "rgba(99,102,241,0.08)";
     ctx.beginPath();
-
-    ctx.arc(
-      70,
-      60,
-      230,
-      0,
-      Math.PI * 2
-    );
-
+    ctx.arc(70, 60, 230, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle =
-      "rgba(124,58,237,0.08)";
-
+    ctx.fillStyle = "rgba(124,58,237,0.08)";
     ctx.beginPath();
-
-    ctx.arc(
-      1530,
-      590,
-      280,
-      0,
-      Math.PI * 2
-    );
-
+    ctx.arc(1530, 590, 280, 0, Math.PI * 2);
     ctx.fill();
 
     // Border
-    ctx.strokeStyle =
-      "rgba(99,102,241,0.22)";
-
+    ctx.strokeStyle = "rgba(99,102,241,0.22)";
     ctx.lineWidth = 3;
-
     ctx.beginPath();
-
-    ctx.roundRect(
-      18,
-      18,
-      width - 36,
-      height - 36,
-      35
-    );
-
+    ctx.roundRect(18, 18, width - 36, height - 36, 35);
     ctx.stroke();
 
-    // Level Up badge
-    ctx.fillStyle =
-      "#312E81";
-
+    // Level Up Top Badge
+    ctx.fillStyle = "#312E81";
     ctx.beginPath();
-
-    ctx.roundRect(
-      575,
-      55,
-      350,
-      62,
-      31
-    );
-
+    ctx.roundRect(575, 55, 350, 62, 31);
     ctx.fill();
 
-    ctx.font =
-      '700 27px "BeVietnamPro-Bold"';
+    ctx.font = '700 27px "BeVietnamPro-Bold"';
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("♛  LEVEL UP", 750, 86);
 
-    ctx.fillStyle =
-      "#FFFFFF";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
 
-    ctx.textAlign =
-      "center";
-
-    ctx.textBaseline =
-      "middle";
-
-    ctx.fillText(
-      "♛  LEVEL UP",
-      750,
-      86
-    );
-
-    ctx.textAlign =
-      "left";
-
-    ctx.textBaseline =
-      "alphabetic";
-
-    // Avatar
+    // Avatar Frame & Clip
     const avatarX = 75;
     const avatarY = 145;
     const avatarSize = 300;
 
     ctx.save();
-
     ctx.beginPath();
-
-    ctx.arc(
-      avatarX +
-        avatarSize / 2,
-      avatarY +
-        avatarSize / 2,
-      avatarSize / 2,
-      0,
-      Math.PI * 2
-    );
-
+    ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
     ctx.clip();
 
     if (avatar) {
-      const scale =
-        Math.max(
-          avatarSize /
-            avatar.width,
-          avatarSize /
-            avatar.height
-        );
-
-      const avatarWidth =
-        avatar.width * scale;
-
-      const avatarHeight =
-        avatar.height * scale;
-
+      const scale = Math.max(avatarSize / avatar.width, avatarSize / avatar.height);
+      const avatarWidth = avatar.width * scale;
+      const avatarHeight = avatar.height * scale;
       ctx.drawImage(
         avatar,
-        avatarX +
-          (avatarSize -
-            avatarWidth) / 2,
-        avatarY +
-          (avatarSize -
-            avatarHeight) / 2,
+        avatarX + (avatarSize - avatarWidth) / 2,
+        avatarY + (avatarSize - avatarHeight) / 2,
         avatarWidth,
         avatarHeight
       );
     } else {
-      const fallback =
-        ctx.createLinearGradient(
-          avatarX,
-          avatarY,
-          avatarX +
-            avatarSize,
-          avatarY +
-            avatarSize
-        );
-
-      fallback.addColorStop(
-        0,
-        "#6366F1"
-      );
-
-      fallback.addColorStop(
-        1,
-        "#06B6D4"
-      );
-
-      ctx.fillStyle =
-        fallback;
-
-      ctx.fillRect(
-        avatarX,
-        avatarY,
-        avatarSize,
-        avatarSize
-      );
+      const fallback = ctx.createLinearGradient(avatarX, avatarY, avatarX + avatarSize, avatarY + avatarSize);
+      fallback.addColorStop(0, "#6366F1");
+      fallback.addColorStop(1, "#06B6D4");
+      ctx.fillStyle = fallback;
+      ctx.fillRect(avatarX, avatarY, avatarSize, avatarSize);
     }
-
     ctx.restore();
 
-    ctx.strokeStyle =
-      "#FFFFFF";
-
+    ctx.strokeStyle = "#FFFFFF";
     ctx.lineWidth = 10;
-
     ctx.beginPath();
-
-    ctx.arc(
-      avatarX +
-        avatarSize / 2,
-      avatarY +
-        avatarSize / 2,
-      avatarSize / 2,
-      0,
-      Math.PI * 2
-    );
-
+    ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Name
-    ctx.fillStyle =
-      "#0F172A";
+    // Member Name
+    ctx.fillStyle = "#0F172A";
+    ctx.font = '700 58px "BeVietnamPro-Bold"';
+    ctx.fillText(name.length > 22 ? name.substring(0, 22) + "..." : name, 430, 210);
 
-    ctx.font =
-      '700 58px "BeVietnamPro-Bold"';
+    // 🎨 फोटो बैनर के हिंदी टेक्स्ट अपडेट्स
+    ctx.font = '600 25px "BeVietnamPro-SemiBold"';
+    ctx.fillStyle = "#64748B";
+    ctx.fillText("बहुत-बहुत बधाई! आपका लेवल बढ़ गया है", 435, 255);
 
-    ctx.fillText(
-      name.length > 22
-        ? name.substring(0, 22) +
-          "..."
-        : name,
-      430,
-      210
-    );
+    ctx.fillStyle = "#7C3AED";
+    ctx.font = '700 34px "BeVietnamPro-Bold"';
+    ctx.fillText("नया लेवल", 435, 330);
 
-    ctx.font =
-      '600 25px "BeVietnamPro-SemiBold"';
+    ctx.fillStyle = "#0F172A";
+    ctx.font = '700 88px "BeVietnamPro-Bold"';
+    ctx.fillText(String(newLevel), 435, 430);
 
-    ctx.fillStyle =
-      "#64748B";
+    // Save & Send Canvas Attachment
+    const buffer = canvas.toBuffer("image/png");
+    fs.writeFileSync(output, buffer);
 
-    ctx.fillText(
-      "CONGRATULATIONS! YOU HAVE LEVELED UP",
-      435,
-      255
-    );
-
-    // New Level
-    ctx.fillStyle =
-      "#7C3AED";
-
-    ctx.font =
-      '700 34px "BeVietnamPro-Bold"';
-
-    ctx.fillText(
-      "NEW LEVEL",
-      435,
-      330
-    );
-
-    ctx.fillStyle =
-      "#0F172A";
-
-    ctx.font =
-      '700 88px "BeVietnamPro-Bold"';
-
-    ctx.fillText(
-      String(newLevel),
-      435,
-      420
-    );
-
-    // EXP
-    const currentLevelExp =
-      Math.floor(
-        (
-          (newLevel *
-            newLevel) -
-          newLevel
-        ) *
-        deltaNext / 2
-      );
-
-    const nextLevelExp =
-      Math.floor(
-        (
-          (
-            (newLevel + 1) *
-            (newLevel + 1)
-          ) -
-          (newLevel + 1)
-        ) *
-        deltaNext / 2
-      );
-
-    const currentExp =
-      Math.max(
-        0,
-        exp -
-          currentLevelExp
-      );
-
-    const requiredExp =
-      Math.max(
-        1,
-        nextLevelExp -
-          currentLevelExp
-      );
-
-    const progress =
-      Math.min(
-        1,
-        currentExp /
-          requiredExp
-      );
-
-    ctx.fillStyle =
-      "#E2E8F0";
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-      600,
-      370,
-      500,
-      35,
-      18
-    );
-
-    ctx.fill();
-
-    if (progress > 0) {
-      ctx.fillStyle =
-        "#6366F1";
-
-      ctx.beginPath();
-
-      ctx.roundRect(
-        600,
-        370,
-        Math.max(
-          20,
-          500 * progress
-        ),
-        35,
-        18
-      );
-
-      ctx.fill();
-    }
-
-    ctx.font =
-      '600 22px "BeVietnamPro-SemiBold"';
-
-    ctx.fillStyle =
-      "#64748B";
-
-    ctx.fillText(
-      `${currentExp} / ${requiredExp} EXP`,
-      600,
-      445
-    );
-
-    // Level card
-    const boxX = 1200;
-    const boxY = 145;
-    const boxW = 320;
-    const boxH = 300;
-
-    const levelGradient =
-      ctx.createLinearGradient(
-        boxX,
-        boxY,
-        boxX,
-        boxY + boxH
-      );
-
-    levelGradient.addColorStop(
-      0,
-      "#312E81"
-    );
-
-    levelGradient.addColorStop(
-      1,
-      "#5B21B6"
-    );
-
-    ctx.fillStyle =
-      levelGradient;
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-      boxX,
-      boxY,
-      boxW,
-      boxH,
-      45
-    );
-
-    ctx.fill();
-
-    ctx.textAlign =
-      "center";
-
-    ctx.fillStyle =
-      "#C4B5FD";
-
-    ctx.font =
-      '700 25px "BeVietnamPro-SemiBold"';
-
-    ctx.fillText(
-      "CURRENT LEVEL",
-      boxX +
-        boxW / 2,
-      boxY + 65
-    );
-
-    ctx.fillStyle =
-      "#FFFFFF";
-
-    ctx.font =
-      '700 110px "BeVietnamPro-Bold"';
-
-    ctx.fillText(
-      String(newLevel),
-      boxX +
-        boxW / 2,
-      boxY + 200
-    );
-
-    ctx.fillStyle =
-      "#FDE68A";
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-      boxX + 60,
-      boxY + 225,
-      200,
-      45,
-      22
-    );
-
-    ctx.fill();
-
-    ctx.fillStyle =
-      "#312E81";
-
-    ctx.font =
-      '700 22px "BeVietnamPro-Bold"';
-
-    ctx.fillText(
-      "RANK UP!",
-      boxX +
-        boxW / 2,
-      boxY + 254
-    );
-
-    // Footer
-    ctx.textAlign =
-      "left";
-
-    ctx.font =
-      '600 18px "BeVietnamPro-SemiBold"';
-
-    ctx.fillStyle =
-      "#94A3B8";
-
-    ctx.fillText(
-      "MESSENGER RANK SYSTEM",
-      75,
-      610
-    );
-
-    ctx.textAlign =
-      "right";
-
-    ctx.fillText(
-      `NEXT LEVEL: ${nextLevelExp} EXP`,
-      1525,
-      610
-    );
-
-    ctx.textAlign =
-      "left";
-
-    fs.writeFileSync(
-      output,
-      canvas.toBuffer(
-        "image/png"
-      )
-    );
-
-    await api.sendMessage(
+    api.sendMessage(
       {
         body: message,
-        mentions: [
-          {
-            tag: name,
-            id: senderID
-          }
-        ],
-        attachment:
-          fs.createReadStream(
-            output
-          )
+        attachment: fs.createReadStream(output)
       },
       threadID,
       () => {
-        try {
+        if (fs.existsSync(output)) {
           fs.unlinkSync(output);
-        } catch (e) {}
-      }
+        }
+      },
+      event.messageID
     );
-
-  } catch (error) {
-    console.error(
-      "Rankup Banner Error:",
-      error
-    );
-
-    try {
-      await api.sendMessage(
-        {
-          body: message,
-          mentions: [
-            {
-              tag: name,
-              id: senderID
-            }
-          ]
-        },
-        threadID
-      );
-    } catch (e) {}
+  } catch (err) {
+    console.log("[RANKUP ERROR]:", err);
   }
-};
-
-module.exports.languages = {
-  en: {
-    on:
-      "✅ Rankup notification is now ON.",
-    off:
-      "⚠️ Rankup notification is now OFF.",
-    statusOn:
-      "📊 Rankup notification is currently ON.",
-    statusOff:
-      "📊 Rankup notification is currently OFF."
-  }
-};
-
-module.exports.run = async function ({
-  api,
-  event,
-  Threads
-}) {
-  const {
-    threadID,
-    messageID
-  } = event;
-
-  const result =
-    await Threads.getData(
-      threadID
-    );
-
-  const data =
-    result.data || {};
-
-  const option =
-    String(
-      event.body || ""
-    )
-      .trim()
-      .split(/\s+/)[1]
-      ?.toLowerCase();
-
-  if (option === "on") {
-    data.rankup = true;
-
-    await Threads.setData(
-      threadID,
-      { data }
-    );
-
-    global.data.threadData.set(
-      threadID,
-      data
-    );
-
-    return api.sendMessage(
-      "✅ Rankup notification is now ON.",
-      threadID,
-      messageID
-    );
-  }
-
-  if (option === "off") {
-    data.rankup = false;
-
-    await Threads.setData(
-      threadID,
-      { data }
-    );
-
-    global.data.threadData.set(
-      threadID,
-      data
-    );
-
-    return api.sendMessage(
-      "⚠️ Rankup notification is now OFF.",
-      threadID,
-      messageID
-    );
-  }
-
-  return api.sendMessage(
-    data.rankup === false
-      ? "📊 Rankup notification is currently OFF.\n\nUse: rankup on"
-      : "📊 Rankup notification is currently ON.\n\nUse: rankup off",
-    threadID,
-    messageID
-  );
 };

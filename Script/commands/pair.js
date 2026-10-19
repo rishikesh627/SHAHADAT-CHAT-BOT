@@ -23,7 +23,7 @@ module.exports.run = async function ({ event, api, Users }) {
     const members = threadInfo.userInfo.filter(u => u.id !== senderID && u.id !== botID);
 
     if (members.length === 0) {
-      return api.sendMessage("Please reply or mention someone......", threadID, messageID);
+      return api.sendMessage("कृपया किसी को मेंशन करें या रिप्लाई करें......", threadID, messageID);
     }
 
     const randomUser = members[Math.floor(Math.random() * members.length)];
@@ -46,7 +46,7 @@ module.exports.run = async function ({ event, api, Users }) {
 
     return api.sendMessage(
       {
-        body: "~পারফেক্ট জুটি তোমাদের জন্য শুভকামনা রইল 🫶",
+        body: "~तुम्हारी जोड़ी परफेक्ट है, दोनों के लिए शुभकामनाएँ 🫶",
         attachment: fs.createReadStream(imgPath)
       },
       threadID,
@@ -55,6 +55,6 @@ module.exports.run = async function ({ event, api, Users }) {
     );
 
   } catch (err) {
-    return api.sendMessage("API Error Call Boss SAHU", threadID, messageID);
+    return api.sendMessage("API में गड़बड़ है, बॉस साहू को बोलो", threadID, messageID);
   }
 };

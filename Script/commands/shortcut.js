@@ -4,7 +4,7 @@ module.exports.config = {
     version: "2.0.0",
     hasPermssion: 1,
     credits: "SHAHADAT SAHU",
-    description: "Group Shortcut Management System",
+    description: "ग्रुप शॉर्टकट प्रबंधन प्रणाली",
     commandCategory: "system",
     usages: "[add/list/search/delete/clear/on/off]",
     cooldowns: 5,
@@ -238,7 +238,7 @@ module.exports.handleReply = async function ({
     if (handleReply.type === "addInput") {
         if (!input) {
             return api.sendMessage(
-                "⚠️ Shortcut keyword empty রাখা যাবে না।",
+                "⚠️ शॉर्टकट कीवर्ड खाली नहीं रखा जा सकता।",
                 threadID,
                 messageID
             );
@@ -255,7 +255,7 @@ module.exports.handleReply = async function ({
 
         if (exists) {
             return api.sendMessage(
-                "⚠️ এই keyword-এর shortcut আগে থেকেই আছে।",
+                "⚠️ इस कीवर्ड का शॉर्टकट पहले से मौजूद है।",
                 threadID,
                 messageID
             );
@@ -268,7 +268,7 @@ module.exports.handleReply = async function ({
         } catch (_) {}
 
         return api.sendMessage(
-            "» এখন shortcut-এর reply পাঠান।",
+            "» अब शॉर्टकट का रिप्लाई भेजें।",
             threadID,
             (error, info) => {
                 if (error || !info) return;
@@ -288,7 +288,7 @@ module.exports.handleReply = async function ({
     if (handleReply.type === "addOutput") {
         if (!input) {
             return api.sendMessage(
-                "⚠️ Shortcut output empty রাখা যাবে না।",
+                "⚠️ शॉर्टकट आउटपुट खाली नहीं रखा जा सकता।",
                 threadID,
                 messageID
             );
@@ -308,7 +308,7 @@ module.exports.handleReply = async function ({
 
         if (exists) {
             return api.sendMessage(
-                "⚠️ এই keyword-এর shortcut আগে থেকেই আছে।",
+                "⚠️ इस कीवर्ड का शॉर्टकट पहले से मौजूद है।",
                 threadID,
                 messageID
             );
@@ -338,10 +338,10 @@ module.exports.handleReply = async function ({
         } catch (_) {}
 
         return api.sendMessage(
-            "» Shortcut Added\n\n" +
+            "» शॉर्टकट जोड़ा गया\n\n" +
             `🆔 ID: ${shortcut.id}\n` +
-            `⌨️ Input: ${shortcut.input}\n` +
-            `💬 Output: ${shortcut.output}`,
+            `⌨️ इनपुट: ${shortcut.input}\n` +
+            `💬 आउटपुट: ${shortcut.output}`,
             threadID,
             messageID
         );
@@ -350,7 +350,7 @@ module.exports.handleReply = async function ({
     if (handleReply.type === "clear") {
         if (normalize(input) !== "confirm") {
             return api.sendMessage(
-                "⚠️ Cancelled.\n`confirm` reply করুন।",
+                "⚠️ रद्द किया गया।\n`confirm` रिप्लाई करें।",
                 threadID,
                 messageID
             );
@@ -382,7 +382,7 @@ module.exports.handleReply = async function ({
         } catch (_) {}
 
         return api.sendMessage(
-            "» এই group-এর সব shortcut delete করা হয়েছে।",
+            "» इस ग्रुप के सभी शॉर्टकट हटा दिए गए हैं।",
             threadID,
             messageID
         );
@@ -413,7 +413,7 @@ module.exports.run = async function ({
         case "new":
         case "create": {
             return api.sendMessage(
-                "» Shortcut Add\n\nReply করে shortcut keyword পাঠান।",
+                "» शॉर्टकट जोड़ें\n\nरिप्लाई करके शॉर्टकट कीवर्ड भेजें।",
                 threadID,
                 (error, info) => {
                     if (error || !info) return;
@@ -433,7 +433,7 @@ module.exports.run = async function ({
         case "all": {
             if (!shortcuts.length) {
                 return api.sendMessage(
-                    "» এই group-এ কোনো shortcut নেই।",
+                    "» इस ग्रुप में कोई शॉर्टकट नहीं है।",
                     threadID,
                     messageID
                 );
@@ -445,7 +445,7 @@ module.exports.run = async function ({
             );
 
             return api.sendMessage(
-                "» Shortcut List\n\n" +
+                "» शॉर्टकट सूची\n\n" +
                 list.join("\n\n"),
                 threadID,
                 messageID
@@ -460,7 +460,7 @@ module.exports.run = async function ({
 
             if (!keyword) {
                 return api.sendMessage(
-                    "⚠️ Search keyword দিন।",
+                    "⚠️ खोज कीवर्ड दें।",
                     threadID,
                     messageID
                 );
@@ -474,7 +474,7 @@ module.exports.run = async function ({
 
             if (!results.length) {
                 return api.sendMessage(
-                    "⚠️ Shortcut পাওয়া যায়নি।",
+                    "⚠️ शॉर्टकट नहीं मिला।",
                     threadID,
                     messageID
                 );
@@ -486,7 +486,7 @@ module.exports.run = async function ({
             );
 
             return api.sendMessage(
-                "» Shortcut Search\n\n" +
+                "» शॉर्टकट खोज\n\n" +
                 list.join("\n\n"),
                 threadID,
                 messageID
@@ -503,7 +503,7 @@ module.exports.run = async function ({
 
             if (!target) {
                 return api.sendMessage(
-                    "⚠️ Shortcut ID অথবা keyword দিন।",
+                    "⚠️ शॉर्टकट ID या कीवर्ड दें।",
                     threadID,
                     messageID
                 );
@@ -517,7 +517,7 @@ module.exports.run = async function ({
 
             if (index === -1) {
                 return api.sendMessage(
-                    "⚠️ Shortcut পাওয়া যায়নি।",
+                    "⚠️ शॉर्टकट नहीं मिला।",
                     threadID,
                     messageID
                 );
@@ -545,7 +545,7 @@ module.exports.run = async function ({
             );
 
             return api.sendMessage(
-                "» Shortcut Deleted\n\n" +
+                "» शॉर्टकट हटाया गया\n\n" +
                 `🆔 ID: ${removed.id}`,
                 threadID,
                 messageID
@@ -556,15 +556,15 @@ module.exports.run = async function ({
         case "empty": {
             if (!shortcuts.length) {
                 return api.sendMessage(
-                    "» এই group-এ কোনো shortcut নেই।",
+                    "» इस ग्रुप में कोई शॉर्टकट नहीं है।",
                     threadID,
                     messageID
                 );
             }
 
             return api.sendMessage(
-                "⚠️ এই group-এর সব shortcut delete হবে।\n\n" +
-                "Confirm করতে `confirm` reply করুন।",
+                "⚠️ इस ग्रुप के सभी शॉर्टकट हटा दिए जाएंगे।\n\n" +
+                "पुष्टि करने के लिए `confirm` रिप्लाई करें।",
                 threadID,
                 (error, info) => {
                     if (error || !info) return;
@@ -592,7 +592,7 @@ module.exports.run = async function ({
             saveFileData(data);
 
             return api.sendMessage(
-                "» Shortcut system চালু হয়েছে।",
+                "» शॉर्टकट प्रणाली चालू हो गई है।",
                 threadID,
                 messageID
             );
@@ -610,7 +610,7 @@ module.exports.run = async function ({
             saveFileData(data);
 
             return api.sendMessage(
-                "» Shortcut system বন্ধ হয়েছে।",
+                "» शॉर्टकट प्रणाली बंद हो गई है।",
                 threadID,
                 messageID
             );
@@ -618,7 +618,7 @@ module.exports.run = async function ({
 
         default:
             return api.sendMessage(
-                "⚠️ Invalid option.\n\n" +
+                "⚠️ अमान्य विकल्प।\n\n" +
                 "/shortcut add\n" +
                 "/shortcut list\n" +
                 "/shortcut search <keyword>\n" +

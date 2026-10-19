@@ -74,7 +74,7 @@ module.exports.run = async function ({
 │ facebook.com/61594111949950
 ├─ 💌 𝗠𝗲𝘀𝘀𝗲𝗻𝗴𝗲𝗿 :
 │ m.me/Hello.baby1222
-├─ 📞 𝗪𝗵𝗮𝘁𝘀𝗀𝗩𝗵𝗔𝗽𝗽 :
+├─ 📞 𝗪𝗵𝗮𝘁𝘀𝗴𝗩𝗵𝗔𝗽𝗽 :
 │ wa.me/@rishikesh9980
 ╰───────⭓
 
@@ -88,17 +88,8 @@ module.exports.run = async function ({
 ❤️ 𝗧𝗵𝗮𝗻𝗸𝘀 𝗳𝗼𝗿 𝘂𝘀𝗶𝗻𝗴 🌺
  😍${botName}😘`;
 
-  const imgLinks = [
-    "https://i.imgur.com/cwd64Av.jpeg",
-    "https://i.imgur.com/hPtliXo.jpeg",
-    "https://i.imgur.com/L7txp4M.jpeg",
-    "https://i.imgur.com/5dG8PS5.jpeg"
-  ];
-
-  const imgLink =
-    imgLinks[
-      Math.floor(Math.random() * imgLinks.length)
-    ];
+  // Sirf ek hi fixed image
+  const imgLink = "https://i.imgur.com/l5xNpRB.jpeg";
 
   const cacheDir = __dirname + "/cache";
 

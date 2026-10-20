@@ -4,8 +4,8 @@
   "description": "Made By SHAHADAT SAHU",
   "main": "Main.js",
   "engines": {
-    "node": "22.x",
-    "npm": ">=10.0.0 <13.0.0"
+    "node": "20.x",
+    "npm": ">=10.0.0"
   },
   "scripts": {
     "start": "node Sahu.js",
@@ -35,7 +35,6 @@
   "dependencies": {
     "@miraipr0ject/assets": "^1.0.9",
     "axios": "^1.6.0",
-    "canvas": "^3.2.0",
     "chalk": "^4.1.2",
     "express": "^4.19.2",
     "form-data": "^4.0.0",
@@ -48,8 +47,8 @@
     "sahu-fca": "latest",
     "sequelize": "^6.21.4",
     "shaon-videos-downloader": "^1.0.1",
-    "sqlite3": "^5.1.7",
     "string-similarity": "^4.0.4",
+    "translate-google": "^1.5.0",
     "yt-search": "^2.10.4",
     "ytdl-core": "^4.11.2",
     "youtube-search-api": "^2.0.1"

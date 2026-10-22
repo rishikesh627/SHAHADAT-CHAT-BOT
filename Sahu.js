@@ -38,20 +38,21 @@ function startBot() {
     console.log("Main.js stopped.");
     console.log("Exit Code:", code);
     
-    // Custom check: If it stopped for an auto-reload, don't say disabled
+    // अगर ऑटो-रीलोड ट्रिगर हुआ है, तो बॉट दोबारा लोड होगा
     if (reloadTimeout) {
-      console.log("Reloading process initiated...");
+      console.log("🔄 [Auto-Reload] बूटस्ट्रैप प्रोसेस रीस्टार्ट हो रहा है...");
     } else {
-      console.log("Automatic restart is disabled.");
+      console.log("Automatic restart is disabled. Restarting in 5 seconds to keep safe...");
+      setTimeout(startBot, 5000); // सुरक्षित रखने के लिए बंद होने पर 5 सेकंड में ऑटो-रीस्टार्ट
     }
   });
 }
 
-// Function to trigger a live hot-reload
+// लाइव हॉट-रीलोड ट्रिगर करने वाला फंक्शन
 function reloadBot() {
   if (shuttingDown) return;
   
-  console.log("\n🔄 [Auto-Reload] Changes detected in files! Restarting the bot live...");
+  console.log("\n⚡ [Auto-Load] फाइलों में बदलाव या नई स्क्रिप्ट मिली! बॉट लाइव अपडेट हो रहा है...");
   
   if (bot && bot.exitCode === null && bot.signalCode === null) {
     bot.once("close", () => {
@@ -67,20 +68,33 @@ function reloadBot() {
   }
 }
 
-// Watch directory for edited or newly copied files
-console.log("👀 Auto-Watcher Active: Monitoring files for copy/edit updates...");
-fs.watch(__dirname, { recursive: true }, (eventType, filename) => {
-  // Only trigger for javascript file adjustments and ignore node_modules or git caches
-  if (filename && filename.endsWith(".js") && !filename.includes("node_modules") && !filename.includes(".git")) {
-    
-    // Debounce structure to make sure file finishing copying before firing reload
-    clearTimeout(reloadTimeout);
-    reloadTimeout = setTimeout(() => {
-      reloadTimeout = null;
-      reloadBot();
-    }, 1000); // 1-second delay ensures files copy completely
-  }
-});
+// सिर्फ 'Script' फ़ोल्डर और उसकी सब-फ़ाइल्स पर नज़र रखने के लिए वॉचर
+const scriptFolder = path.join(__dirname, "Script");
+
+if (fs.existsSync(scriptFolder)) {
+  console.log("👀 Auto-Watcher Active: 'Script' फ़ोल्डर पर लाइव नज़र रखी जा रही है...");
+  fs.watch(scriptFolder, { recursive: true }, (eventType, filename) => {
+    // सिर्फ .js फाइलों के बदलाव को डिटेक्ट करेगा
+    if (filename && filename.endsWith(".js")) {
+      
+      // डिबाउंस ताकि फ़ाइल पूरी तरह कॉपी/पेस्ट होने के बाद ही रीलोड हो
+      clearTimeout(reloadTimeout);
+      reloadTimeout = setTimeout(() => {
+        reloadBot();
+      }, 1200); // 1.2 सेकंड का सेफ डिले
+    }
+  });
+} else {
+  console.log("⚠️ Warning: 'Script' फ़ोल्डर नहीं मिला, पूरे प्रोजेक्ट रूट पर नज़र रखी जा रही है...");
+  fs.watch(__dirname, { recursive: true }, (eventType, filename) => {
+    if (filename && filename.endsWith(".js") && !filename.includes("node_modules") && !filename.includes(".git")) {
+      clearTimeout(reloadTimeout);
+      reloadTimeout = setTimeout(() => {
+        reloadBot();
+      }, 1200);
+    }
+  });
+}
 
 function stopBot(signal) {
   if (shuttingDown) return;

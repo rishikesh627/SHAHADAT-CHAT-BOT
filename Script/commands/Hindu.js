@@ -5,7 +5,7 @@ const path = require("path");
 module.exports.config = {
     name: "hindu",
     aliases: ["hinduvideo", "bhakti", "mandir"],
-    version: "1.0.2",
+    version: "1.1.0",
     hasPermssion: 0,
     credits: "SHAHADAT SAHU",
     description: "Send a random Hindu devotional video",
@@ -13,10 +13,7 @@ module.exports.config = {
     usages: "hindu",
     cooldowns: 5,
     usePrefix: true,
-    dependencies: {
-        axios: "",
-        "fs-extra": ""
-    }
+    dependencies: { axios: "", "fs-extra": "" }
 };
 
 // 🕉️ Hindu / Bhakti video links (Catbox)
@@ -47,125 +44,105 @@ const captions = [
 ];
 
 module.exports.run = async function ({ api, event }) {
-    const fileName =
-        `hindu_${Date.now()}_${Math.random()
-            .toString(36)
-            .slice(2)}.mp4`;
+    const msgID = event.messageID || null;
 
-    const cacheDir =
-        path.join(__dirname, "cache");
+    // ✅ 1. Safe reaction helper (पुराने bot versions के लिए)
+    const react = (emoji) => {
+        try {
+            if (typeof api.setMessageReaction === "function") {
+                api.setMessageReaction(emoji, msgID, () => {}, true);
+            }
+        } catch {}
+    };
 
-    const filePath =
-        path.join(cacheDir, fileName);
+    // ✅ 2. Per-thread lock — ek time pe ek hi video download
+    if (!global._hinduLock) global._hinduLock = {};
+    if (global._hinduLock[event.threadID]) {
+        return api.sendMessage(
+            "⏳ पिछला वीडियो अभी आ रहा है, थोड़ा रुको।",
+            event.threadID,
+            msgID
+        );
+    }
+    global._hinduLock[event.threadID] = true;
+
+    const fileName = `hindu_${Date.now()}_${Math.random().toString(36).slice(2)}.mp4`;
+    const cacheDir = path.join(__dirname, "cache");
+    const filePath = path.join(cacheDir, fileName);
 
     try {
         await fs.ensureDir(cacheDir);
 
-        const videoUrl =
-            videos[
-                Math.floor(
-                    Math.random() * videos.length
-                )
-            ];
+        const videoUrl = videos[Math.floor(Math.random() * videos.length)];
 
-        api.setMessageReaction(
-            "⏳",
-            event.messageID,
-            () => {},
-            true
-        );
+        react("⏳");
 
-        const response = await axios.get(
-            videoUrl,
-            {
-                responseType: "stream",
-                timeout: 60000,
-                maxContentLength: Infinity,
-                maxBodyLength: Infinity,
-                headers: {
-                    "User-Agent":
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                    "Referer": "https://catbox.moe/"
-                }
+        const response = await axios.get(videoUrl, {
+            responseType: "stream",
+            timeout: 60000,
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+            headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Referer": "https://catbox.moe/"
             }
-        );
-
-        await new Promise((resolve, reject) => {
-            const writer =
-                fs.createWriteStream(filePath);
-
-            response.data.pipe(writer);
-
-            writer.on("finish", resolve);
-            writer.on("error", reject);
-
-            response.data.on(
-                "error",
-                reject
-            );
         });
 
-        const stat =
-            await fs.stat(filePath);
+        await new Promise((resolve, reject) => {
+            const writer = fs.createWriteStream(filePath);
+            response.data.pipe(writer);
+            writer.on("finish", resolve);
+            writer.on("error", reject);
+            response.data.on("error", reject);
+        });
 
-        if (!stat.size) {
-            throw new Error(
-                "Downloaded video is empty"
-            );
+        const stat = await fs.stat(filePath);
+
+        if (!stat.size) throw new Error("Downloaded video is empty");
+
+        // ✅ 3. Size check — Messenger limit (24MB) से बड़ी video भेजने से पहले रोक
+        const MB = stat.size / (1024 * 1024);
+        if (MB > 24) {
+            throw new Error(`Video too large: ${MB.toFixed(1)} MB (limit 24MB)`);
         }
 
-        api.setMessageReaction(
-            "✅",
-            event.messageID,
-            () => {},
-            true
-        );
+        react("✅");
 
-        // 🎲 Random caption pick
-        const caption =
-            captions[
-                Math.floor(
-                    Math.random() * captions.length
-                )
-            ];
+        const caption = captions[Math.floor(Math.random() * captions.length)];
 
         return api.sendMessage(
             {
                 body: caption,
-                attachment:
-                    fs.createReadStream(filePath)
+                attachment: fs.createReadStream(filePath)
             },
             event.threadID,
             async () => {
-                await fs.remove(filePath)
-                    .catch(() => {});
+                await fs.remove(filePath).catch(() => {});
             },
-            event.messageID
+            msgID
         );
 
     } catch (error) {
-        await fs.remove(filePath)
-            .catch(() => {});
+        await fs.remove(filePath).catch(() => {});
 
         console.error(
             "[HINDU ERROR]",
-            error?.response?.status ||
-            error?.message ||
-            error
+            error?.response?.status || error?.message || error
         );
 
-        api.setMessageReaction(
-            "❌",
-            event.messageID,
-            () => {},
-            true
-        );
+        react("❌");
 
         return api.sendMessage(
             "❌ हिंदू भक्ति वीडियो भेजा नहीं जा सका।\n\n" +
-            "⚠️ वीडियो सोर्स या डाउनलोड कनेक्शन में समस्या हुई है।",
+            "⚠️ कारण: " + (error?.message || "unknown") + "\n" +
+            "🔁 थोड़ी देर बाद फिर कोशिश करें।",
             event.threadID,
-            event.messageID
+            msgID
         );
+
+    } finally {
+        // ✅ 4. Lock हमेशा release (success या fail दोनों में)
+        global._hinduLock[event.threadID] = false;
     }
 };

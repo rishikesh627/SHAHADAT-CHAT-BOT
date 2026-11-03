@@ -144,13 +144,11 @@ function guessGenderFromName(name) {
   const lower = name.toLowerCase();
   const words = lower.split(/[\s_.-]+/);
 
-  // Pehle exact match
   for (const word of words) {
     if (FEMALE_KEYWORDS.includes(word)) return "female";
     if (MALE_KEYWORDS.includes(word)) return "male";
   }
 
-  // Phir partial match
   for (const word of words) {
     if (word.length < 3) continue;
 
@@ -167,7 +165,7 @@ function guessGenderFromName(name) {
 
 module.exports.config = {
   name: "autoreplybot",
-  version: "4.1.0",
+  version: "4.2.0",
   hasPermssion: 0,
   credits: "SHAHADAT SAHU",
   usePrefix: false,
@@ -181,6 +179,14 @@ module.exports.handleEvent = async function ({ api, event }) {
   if (!body) return;
 
   const msg = body.toLowerCase().trim();
+
+  /* ✅ FIX 1: Duplicate message guard — ek message pe ek hi reply */
+  if (!global._processedMsgs) global._processedMsgs = new Set();
+  if (global._processedMsgs.has(messageID)) return;
+  global._processedMsgs.add(messageID);
+  if (global._processedMsgs.size > 500) {
+    global._processedMsgs = new Set([...global._processedMsgs].slice(-250));
+  }
 
   /* ----- Gender check with cache ----- */
   const genderDB = loadGender();
@@ -347,8 +353,6 @@ module.exports.handleEvent = async function ({ api, event }) {
       male: "प्यार करना है तो सीधे बॉस रिषिकेश को बोल भाई 😻🔥",
       female: "प्यार करना है तो सीधे बॉस रिषिकेश को बोल जानू 😻🔥"
     },
-
-    /* ---------- 🆕 New Fun Lines ---------- */
     "single": {
       male: "सिंगल हो? कोई बात नहीं भाई, रिषिकेश बॉस भी सिंगल हैं 😂",
       female: "सिंगल हो? चलो बॉस रिषिकेश से सेटिंग करा दूँ 😏💘"
@@ -425,7 +429,6 @@ module.exports.handleEvent = async function ({ api, event }) {
   } else if (userGender === "female") {
     replyText = entry.female;
   } else {
-    // Gender पता नहीं चला तो दोनों reply भेजो
     replyText = entry.male + "\n\n" + entry.female;
   }
 
@@ -435,6 +438,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     replyText,
     threadID,
     (err, info) => {
+      if (err || !info) return;
       global.client.handleReply.push({
         name: this.config.name,
         messageID: info.messageID,
@@ -450,6 +454,12 @@ module.exports.handleEvent = async function ({ api, event }) {
 module.exports.handleReply = async function ({ api, event, handleReply }) {
   if (event.senderID !== handleReply.author) return;
 
+  /* ✅ FIX 2: Entry use hote hi delete karo — dobara fire nahi hogi */
+  const idx = global.client.handleReply.findIndex(
+    h => h.messageID === handleReply.messageID
+  );
+  if (idx !== -1) global.client.handleReply.splice(idx, 1);
+
   try {
     const text = event.body.trim();
 
@@ -462,19 +472,10 @@ module.exports.handleReply = async function ({ api, event, handleReply }) {
       ? res.data.response[0]
       : res.data.response;
 
-    if (!global.client.handleReply) global.client.handleReply = [];
-
+    /* ✅ FIX 3: Andar dobara push NAHI kar rahe — double reply band */
     return api.sendMessage(
       reply,
       event.threadID,
-      (err, info) => {
-        global.client.handleReply.push({
-          name: module.exports.config.name,
-          messageID: info.messageID,
-          author: event.senderID,
-          type: "sahu"
-        });
-      },
       event.messageID
     );
 
